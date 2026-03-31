@@ -1,0 +1,33 @@
+<view class="address-edit-container">
+  <view class="form-group">
+    <view class="form-item">
+      <text class="item-label">收货人</text>
+      <input class="item-input" placeholder="请输入收货人姓名" value="{{address.name}}" bindinput="onNameInput"/>
+    </view>
+    <view class="form-item">
+      <text class="item-label">手机号</text>
+      <input class="item-input" placeholder="请输入手机号" type="number" value="{{address.phone}}" bindinput="onPhoneInput"/>
+    </view>
+    <view class="form-item" bindtap="selectRegion">
+      <text class="item-label">所在地区</text>
+      <view class="item-value {{address.region ? 'active' : ''}}">
+        {{address.region || '请选择所在地区'}}
+      </view>
+      <text class="arrow">></text>
+    </view>
+    <view class="form-item detail-item">
+      <text class="item-label">详细地址</text>
+      <textarea class="item-textarea" placeholder="请输入详细地址，如街道、门牌号等" value="{{address.detail}}" bindinput="onDetailInput"/>
+    </view>
+  </view>
+
+  <view class="form-group">
+    <view class="form-item switch-item">
+      <text class="item-label">设为默认地址</text>
+      <switch checked="{{address.isDefault}}" bindchange="toggleDefault" color="#6B4423"/>
+    </view>
+  </view>
+
+  <view class="save-btn" bindtap="saveAddress">保存</view>
+  <view class="delete-btn" wx:if="{{isEdit}}" bindtap="deleteAddress">删除地址</view>
+</view>

@@ -1,0 +1,100 @@
+<view class="confirm-container">
+  <!-- 取餐方式 -->
+  <view class="delivery-tabs">
+    <view class="tab {{deliveryType === 'self' ? 'active' : ''}}" bindtap="switchDelivery" data-type="self">到店自取</view>
+    <view class="tab {{deliveryType === 'delivery' ? 'active' : ''}}" bindtap="switchDelivery" data-type="delivery">外卖配送</view>
+  </view>
+
+  <!-- 门店/地址信息 -->
+  <view class="address-section card" bindtap="selectAddress">
+    <view class="address-header">
+      <text class="address-label">{{deliveryType === 'self' ? '取餐门店' : '配送地址'}}</text>
+      <text class="arrow">></text>
+    </view>
+    <view class="address-content" wx:if="{{address}}">
+      <view class="address-main">
+        <text class="address-name">{{address.name}}</text>
+        <text class="address-phone">{{address.phone}}</text>
+      </view>
+      <view class="address-detail">{{address.detail}}</view>
+    </view>
+    <view class="address-empty" wx:else>
+      <text>请选择{{deliveryType === 'self' ? '取餐门店' : '配送地址'}}</text>
+    </view>
+  </view>
+
+  <!-- 取餐时间 -->
+  <view class="time-section card" bindtap="selectTime" wx:if="{{deliveryType === 'self'}}">
+    <text class="time-label">取餐时间</text>
+    <view class="time-value">
+      <text>{{selectedTime || '请选择取餐时间'}}</text>
+      <text class="arrow">></text>
+    </view>
+  </view>
+
+  <!-- 商品清单 -->
+  <view class="goods-section card">
+    <view class="section-title">商品清单</view>
+    <view class="goods-list">
+      <view class="goods-item" wx:for="{{orderItems}}" wx:key="index">
+        <image class="goods-image" src="{{item.image}}" mode="aspectFill"/>
+        <view class="goods-info">
+          <text class="goods-name">{{item.name}}</text>
+          <text class="goods-spec">{{item.specs}}</text>
+        </view>
+        <view class="goods-right">
+          <text class="price price-sm">¥{{item.price}}</text>
+          <text class="goods-quantity">x{{item.quantity}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 优惠券 -->
+  <view class="coupon-section card" bindtap="selectCoupon">
+    <text class="section-label">优惠券</text>
+    <view class="section-value">
+      <text class="coupon-text {{selectedCoupon ? 'active' : ''}}">{{selectedCoupon ? '-¥' + selectedCoupon.value : '不使用优惠券'}}</text>
+      <text class="arrow">></text>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="remark-section card">
+    <text class="section-label">订单备注</text>
+    <input class="remark-input" placeholder="请输入备注（选填）" value="{{remark}}" bindinput="onRemarkInput"/>
+  </view>
+
+  <!-- 费用明细 -->
+  <view class="fee-section card">
+    <view class="fee-item">
+      <text>商品总额</text>
+      <text>¥{{goodsAmount}}</text>
+    </view>
+    <view class="fee-item">
+      <text>配送费</text>
+      <text>{{deliveryFee > 0 ? '¥' + deliveryFee : '免配送费'}}</text>
+    </view>
+    <view class="fee-item" wx:if="{{selectedCoupon}}">
+      <text>优惠券</text>
+      <text class="discount">-¥{{selectedCoupon.value}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="fee-total">
+      <text>实付金额</text>
+      <text class="total-price price price-lg">¥{{totalAmount}}</text>
+    </view>
+  </view>
+
+  <!-- 底部占位 -->
+  <view class="bottom-placeholder"></view>
+</view>
+
+<!-- 底部提交栏 -->
+<view class="bottom-bar">
+  <view class="total-section">
+    <text class="total-label">实付:</text>
+    <text class="price price-lg">¥{{totalAmount}}</text>
+  </view>
+  <view class="submit-btn" bindtap="submitOrder">提交订单</view>
+</view>

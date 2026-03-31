@@ -1,0 +1,124 @@
+<view class="order-detail-container">
+  <!-- 状态栏 -->
+  <view class="status-section">
+    <view class="status-icon">{{statusIcon}}</view>
+    <view class="status-text">{{order.statusText}}</view>
+    <view class="status-desc">{{statusDesc}}</view>
+  </view>
+
+  <!-- 进度条 -->
+  <view class="progress-section card" wx:if="{{order.status !== 'cancelled'}}">
+    <view class="progress-bar">
+      <view class="progress-line">
+        <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+      </view>
+      <view class="progress-steps">
+        <view class="step {{index <= currentStep ? 'active' : ''}}" wx:for="{{steps}}" wx:key="index">
+          <view class="step-dot"></view>
+          <text class="step-name">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 取餐信息 -->
+  <view class="pickup-section card">
+    <view class="pickup-code" wx:if="{{order.status === 'ready' || order.status === 'completed'}}">
+      <text class="code-label">取餐码</text>
+      <text class="code-value">{{order.pickupCode}}</text>
+    </view>
+    <view class="pickup-info">
+      <view class="info-row">
+        <text class="info-label">{{order.deliveryType === 'self' ? '取餐门店' : '配送地址'}}</text>
+        <text class="info-value">{{order.address.name}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">{{order.deliveryType === 'self' ? '预计取餐' : '配送时间'}}</text>
+        <text class="info-value">{{order.pickupTime || '制作完成后通知'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品清单 -->
+  <view class="goods-section card">
+    <view class="section-title">商品清单</view>
+    <view class="goods-list">
+      <view class="goods-item" wx:for="{{order.items}}" wx:key="index">
+        <image class="goods-image" src="{{item.image}}" mode="aspectFill"/>
+        <view class="goods-info">
+          <text class="goods-name">{{item.name}}</text>
+          <text class="goods-spec">{{item.specs}}</text>
+        </view>
+        <view class="goods-right">
+          <text class="price price-sm">¥{{item.price}}</text>
+          <text class="goods-quantity">x{{item.quantity}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="goods-total">
+      <text>共{{order.totalCount}}件商品</text>
+      <text>小计: <text class="price price-md">¥{{order.goodsAmount}}</text></text>
+    </view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class="info-section card">
+    <view class="section-title">订单信息</view>
+    <view class="info-list">
+      <view class="info-item">
+        <text class="item-label">订单编号</text>
+        <text class="item-value">{{order.orderNo}}</text>
+        <text class="copy-btn" bindtap="copyOrderNo">复制</text>
+      </view>
+      <view class="info-item">
+        <text class="item-label">下单时间</text>
+        <text class="item-value">{{order.createTime}}</text>
+      </view>
+      <view class="info-item">
+        <text class="item-label">支付方式</text>
+        <text class="item-value">{{order.payMethod || '微信支付'}}</text>
+      </view>
+      <view class="info-item" wx:if="{{order.remark}}">
+        <text class="item-label">订单备注</text>
+        <text class="item-value">{{order.remark}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 费用明细 -->
+  <view class="fee-section card">
+    <view class="section-title">费用明细</view>
+    <view class="fee-list">
+      <view class="fee-item">
+        <text>商品总额</text>
+        <text>¥{{order.goodsAmount}}</text>
+      </view>
+      <view class="fee-item">
+        <text>配送费</text>
+        <text>{{order.deliveryFee > 0 ? '¥' + order.deliveryFee : '免配送费'}}</text>
+      </view>
+      <view class="fee-item" wx:if="{{order.coupon}}">
+        <text>优惠券</text>
+        <text class="discount">-¥{{order.coupon.value}}</text>
+      </view>
+      <view class="divider"></view>
+      <view class="fee-total">
+        <text>实付金额</text>
+        <text class="price price-lg">¥{{order.totalAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部占位 -->
+  <view class="bottom-placeholder"></view>
+</view>
+
+<!-- 底部操作栏 -->
+<view class="bottom-bar">
+  <view class="action-btn default" wx:if="{{order.status === 'pending_payment'}}" bindtap="cancelOrder">取消订单</view>
+  <view class="action-btn default" wx:if="{{order.status === 'completed'}}" bindtap="deleteOrder">删除订单</view>
+  <view class="action-btn default" bindtap="contactService">联系客服</view>
+  <view class="action-btn primary" wx:if="{{order.status === 'pending_payment'}}" bindtap="payOrder">立即支付</view>
+  <view class="action-btn primary" wx:if="{{order.status === 'ready'}}" bindtap="confirmPickup">确认取餐</view>
+  <view class="action-btn primary" wx:if="{{order.status === 'completed'}}" bindtap="buyAgain">再来一单</view>
+</view>

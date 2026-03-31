@@ -1,0 +1,200 @@
+.center-container {
+  min-height: 100vh;
+  background: #FAF8F5;
+  padding-bottom: 40rpx;
+}
+
+/* 用户信息区域 */
+.user-section {
+  position: relative;
+  margin-bottom: 24rpx;
+}
+
+.user-bg {
+  height: 240rpx;
+  background: linear-gradient(135deg, #6B4423 0%, #8B5A3C 100%);
+  border-radius: 0 0 40rpx 40rpx;
+}
+
+.user-card {
+  margin: -100rpx 24rpx 0;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.08);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid #FFFFFF;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+  margin-right: 24rpx;
+}
+
+.user-meta {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.user-level {
+  display: flex;
+  align-items: center;
+}
+
+.level-tag {
+  padding: 6rpx 16rpx;
+  background: linear-gradient(135deg, #C17817 0%, #E5A53C 100%);
+  color: #FFFFFF;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  margin-right: 16rpx;
+}
+
+.points {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.user-info .arrow {
+  color: #999999;
+  font-size: 32rpx;
+}
+
+/* 用户统计 */
+.user-stats {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 24rpx;
+  border-top: 2rpx solid #F5F5F5;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+/* 订单区域 */
+.order-section {
+  margin: 0 24rpx 24rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.more {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.order-types {
+  display: flex;
+  justify-content: space-around;
+}
+
+.type-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.type-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+}
+
+.type-name {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.type-badge {
+  position: absolute;
+  top: -8rpx;
+  right: -16rpx;
+  min-width: 32rpx;
+  height: 32rpx;
+  background: #E54D42;
+  border-radius: 16rpx;
+  color: #FFFFFF;
+  font-size: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8rpx;
+}
+
+/* 菜单区域 */
+.menu-section {
+  margin: 0 24rpx 24rpx;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 2rpx solid #F5F5F5;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.menu-name {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.menu-item .arrow {
+  color: #CCCCCC;
+  font-size: 28rpx;
+}
