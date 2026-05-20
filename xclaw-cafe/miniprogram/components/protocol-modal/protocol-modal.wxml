@@ -1,0 +1,30 @@
+<view wx:if="{{visible}}" class="pm-mask" catchtap="stop">
+  <view class="pm-panel" catchtap="stop">
+    <view class="pm-title">欢迎使用 AI 情绪小伙伴</view>
+    <view class="pm-desc">为了向你提供 AI 陪伴服务，我们需要收集以下信息：</view>
+    <view class="pm-list">
+      <view class="pm-item">· 微信昵称、头像（用于身份展示）</view>
+      <view class="pm-item">· 设备 SN、型号（用于设备绑定）</view>
+      <view class="pm-item">· 蓝牙 / 定位 权限（用于设备配网）</view>
+    </view>
+    <view class="pm-tip">
+      我们承诺最小必要原则，详见
+      <text class="pm-link" catchtap="onLink" data-type="privacy">《隐私政策》</text>
+      与
+      <text class="pm-link" catchtap="onLink" data-type="user">《用户协议》</text>
+      。
+    </view>
+
+    <view class="pm-agree" catchtap="onToggle">
+      <view class="pm-check {{checked ? 'on' : ''}}">
+        <text wx:if="{{checked}}" class="pm-check-icon">✓</text>
+      </view>
+      <text class="pm-agree-text">我已阅读并同意以上协议</text>
+    </view>
+
+    <view class="pm-actions">
+      <view class="pm-btn pm-btn-ghost" catchtap="onDisagree">不同意</view>
+      <view class="pm-btn pm-btn-primary {{checked ? '' : 'dis'}}" catchtap="onAgree">同意并继续</view>
+    </view>
+  </view>
+</view>

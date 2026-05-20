@@ -1,0 +1,306 @@
+.rc-page {
+  padding-top: 24rpx;
+  padding-bottom: 160rpx;
+}
+
+/* ---------- 信息提示卡片 ---------- */
+.rc-info-card {
+  display: flex;
+  align-items: flex-start;
+  background: #F0F4FF;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin: 0 32rpx 32rpx;
+}
+
+.rc-info-icon {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: #3B82F6;
+  color: #FFFFFF;
+  font-size: 26rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.rc-info-body {
+  font-size: 26rpx;
+  color: #5A5450;
+  line-height: 1.6;
+}
+
+.rc-bold {
+  font-weight: 600;
+  color: #1F1B16;
+}
+
+/* ---------- 小标题 ---------- */
+.rc-section-title {
+  font-size: 24rpx;
+  color: #9C948D;
+  margin: 0 32rpx 16rpx;
+}
+
+/* ---------- 当前设备卡片 ---------- */
+.rc-device-card {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin: 0 32rpx 32rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+
+.rc-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFD7BE 0%, var(--primary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.rc-device-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rc-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F1B16;
+}
+
+.rc-sn {
+  font-size: 24rpx;
+  color: #9C948D;
+  margin-top: 6rpx;
+}
+
+.rc-status {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.rc-status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #34C759;
+  margin-right: 8rpx;
+}
+
+.rc-status-text {
+  font-size: 24rpx;
+  color: #34C759;
+}
+
+/* ---------- 操作步骤 ---------- */
+.rc-steps-card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  margin: 0 32rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+
+.rc-step-row {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 24rpx;
+  border-bottom: 1rpx solid #F4F1EC;
+}
+
+.rc-step-row:last-child {
+  border-bottom: none;
+}
+
+.rc-step-no {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: #FFE7D9;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.rc-step-text {
+  font-size: 30rpx;
+  color: #1F1B16;
+}
+
+/* ---------- 底部固定按钮 ---------- */
+.rc-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24rpx 32rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: #FFFFFF;
+  border-top: 1rpx solid #F4F1EC;
+  z-index: 10;
+}
+
+.rc-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #FFFFFF;
+  background: var(--primary);
+}
+
+.rc-btn.disabled {
+  background: #FFC9AC;
+}
+
+/* ---------- 复用 add-device 的表单样式 ---------- */
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 16rpx;
+}
+
+.big-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 8rpx;
+}
+
+.hint {
+  font-size: 24rpx;
+  color: #9C948D;
+}
+
+.form-item {
+  margin-top: 24rpx;
+}
+
+.form-label {
+  font-size: 24rpx;
+  color: #5A5450;
+  margin-bottom: 12rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  background: #F4F1EC;
+  border-radius: 14rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: #1F1B16;
+}
+
+.form-input-row {
+  display: flex;
+  align-items: center;
+  background: #F4F1EC;
+  border-radius: 14rpx;
+  padding-right: 16rpx;
+}
+
+.form-input-row .form-input {
+  background: transparent;
+}
+
+.form-eye {
+  padding: 0 16rpx;
+  font-size: 32rpx;
+}
+
+.form-error {
+  font-size: 22rpx;
+  color: var(--danger);
+  margin-top: 10rpx;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* ---------- 配网进度 ---------- */
+.prov-list {
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.prov-item {
+  display: flex;
+  align-items: center;
+}
+
+.prov-dot {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #E8E2D8;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.prov-dot.doing {
+  background: var(--primary);
+}
+
+.prov-dot.done {
+  background: var(--primary);
+}
+
+.prov-text {
+  color: #9C948D;
+  font-size: 28rpx;
+}
+
+.prov-text.doing {
+  color: #1F1B16;
+  font-weight: 500;
+}
+
+.prov-text.done {
+  color: #1F1B16;
+}
+
+.prov-spin {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: rc-spin 0.8s linear infinite;
+}
+
+@keyframes rc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

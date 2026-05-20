@@ -1,19 +1,36 @@
 // app.js
+const storage = require('./utils/storage.js');
+
 App({
-  onLaunch: function () {
-    this.globalData = {
-      // env 参数说明：
-      // env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会请求到哪个云环境的资源
-      // 此处请填入环境 ID, 环境 ID 可在微信开发者工具右上顶部工具栏点击云开发按钮打开获取
-      env: "cloud1-4gbkcrrlf1a2e213",
-    };
-    if (!wx.cloud) {
-      console.error("请使用 2.2.3 或以上的基础库以使用云能力");
-    } else {
-      wx.cloud.init({
-        env: this.globalData.env,
-        traceUser: true,
-      });
+  globalData: {
+    statusBarHeight: 20,
+    systemInfo: null,
+    userInfo: null,
+    hasAgreedProtocol: false
+  },
+
+  onLaunch() {
+    // 系统信息
+    try {
+      const sys = wx.getSystemInfoSync();
+      this.globalData.systemInfo = sys;
+      this.globalData.statusBarHeight = sys.statusBarHeight || 20;
+    } catch (e) {}
+
+    // 协议状态
+    this.globalData.hasAgreedProtocol = storage.getProtocolAgreed();
+
+    // 用户信息
+    this.globalData.userInfo = storage.getUserInfo();
+
+    // mock：首次启动初始化设备列表
+    if (storage.getDevices() === null) {
+      storage.initMockDevices();
     }
   },
+
+  isLogin() {
+    const u = this.globalData.userInfo;
+    return !!(u && (u.openid || u.openId));
+  }
 });

@@ -1,0 +1,6 @@
+<view wx:if="{{visible}}" class="lt-mask">
+  <view class="lt-box">
+    <view class="lt-spinner"></view>
+    <text class="lt-text">{{text}}</text>
+  </view>
+</view>

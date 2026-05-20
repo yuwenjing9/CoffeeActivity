@@ -1,0 +1,40 @@
+.wv-page {
+  padding-bottom: 60rpx;
+}
+
+.wv-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1F1B16;
+  margin-bottom: 8rpx;
+}
+
+.wv-meta {
+  font-size: 22rpx;
+  color: #9C948D;
+  margin-bottom: 24rpx;
+}
+
+.wv-section {
+  margin-bottom: 20rpx;
+}
+
+.wv-h {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 8rpx;
+}
+
+.wv-p {
+  font-size: 26rpx;
+  color: #5A5450;
+  line-height: 1.8;
+}
+
+.wv-foot {
+  font-size: 22rpx;
+  color: #9C948D;
+  text-align: center;
+  margin-top: 36rpx;
+}

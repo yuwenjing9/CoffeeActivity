@@ -1,0 +1,28 @@
+<view class="page wv-page">
+  <view class="card mt-24">
+    <view class="wv-title">{{title}}</view>
+    <view class="wv-meta">最后更新时间：2024-06-01</view>
+
+    <view class="wv-section">
+      <view class="wv-h">一、引言</view>
+      <view class="wv-p">本{{title}}用于说明我们如何收集、使用、保护你的个人信息。请在使用本服务前仔细阅读以下内容。</view>
+    </view>
+
+    <view class="wv-section">
+      <view class="wv-h">二、信息收集与使用</view>
+      <view class="wv-p">我们仅收集为提供服务所必要的信息，包括微信昵称、头像、设备 SN 等。</view>
+    </view>
+
+    <view class="wv-section">
+      <view class="wv-h">三、信息保护</view>
+      <view class="wv-p">我们将采用行业内标准的安全防护措施，包括但不限于数据加密、访问控制等。</view>
+    </view>
+
+    <view class="wv-section">
+      <view class="wv-h">四、联系我们</view>
+      <view class="wv-p">如对本{{title}}有任何疑问，可通过客服 400-123-4567 联系。</view>
+    </view>
+
+    <view class="wv-foot">本页面为示例内容，正式版请替换为实际文案。</view>
+  </view>
+</view>

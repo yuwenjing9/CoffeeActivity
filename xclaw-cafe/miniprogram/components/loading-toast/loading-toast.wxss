@@ -1,0 +1,43 @@
+.lt-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lt-box {
+  background: rgba(0, 0, 0, 0.78);
+  border-radius: 18rpx;
+  padding: 36rpx 44rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200rpx;
+}
+
+.lt-spinner {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  animation: lt-spin 0.8s linear infinite;
+  margin-bottom: 18rpx;
+}
+
+@keyframes lt-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lt-text {
+  color: #fff;
+  font-size: 26rpx;
+}

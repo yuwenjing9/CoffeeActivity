@@ -14,7 +14,7 @@
     "autoAudits": false,
     "showShadowRootInWxmlPanel": true,
     "scopeDataCheck": false,
-    "uglifyFileName": false,
+    "uglifyFileName": true,
     "checkInvalidKey": true,
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
@@ -40,7 +40,7 @@
     "localPlugins": false,
     "disableUseStrict": false,
     "useCompilerPlugins": false,
-    "condition": true,
+    "condition": false,
     "swc": false,
     "disableSWC": true
   },

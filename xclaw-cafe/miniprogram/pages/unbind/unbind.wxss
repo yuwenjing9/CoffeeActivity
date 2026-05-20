@@ -1,0 +1,270 @@
+.ub-page {
+  padding-top: 48rpx;
+  padding-bottom: 180rpx;
+}
+
+/* ========== 解绑中 ========== */
+.ub-warn-wrap {
+  position: relative;
+  width: 300rpx;
+  height: 300rpx;
+  margin: 0 auto 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ub-warn-ring {
+  position: absolute;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  border: 4rpx solid var(--primary);
+  opacity: 0;
+  animation: warn-ring 2.5s ease-out infinite;
+}
+
+.ring1 { animation-delay: 0s; }
+.ring2 { animation-delay: 0.8s; }
+.ring3 { animation-delay: 1.6s; }
+
+@keyframes warn-ring {
+  0%   { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.ub-warn-core {
+  position: relative;
+  z-index: 2;
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFA06B 0%, var(--primary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ub-warn-icon {
+  font-size: 60rpx;
+}
+
+.ub-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  text-align: center;
+}
+
+.ub-sub {
+  font-size: 26rpx;
+  color: #9C948D;
+  text-align: center;
+  margin-top: 12rpx;
+  margin-bottom: 40rpx;
+}
+
+/* 步骤卡片 */
+.ub-steps-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin: 0 32rpx;
+  padding: 8rpx 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.ub-step-row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F4F1EC;
+}
+
+.ub-step-row:last-child {
+  border-bottom: none;
+}
+
+.ub-step-badge {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.ub-step-badge.done {
+  background: #E8F5E9;
+}
+
+.ub-step-badge.doing {
+  background: #FFF0E0;
+}
+
+.ub-step-badge.wait {
+  background: #F4F1EC;
+}
+
+.ub-step-txt.done {
+  color: #34C759;
+  font-size: 28rpx;
+}
+
+.ub-step-txt.wait {
+  color: #9C948D;
+  font-size: 40rpx;
+  line-height: 1;
+  margin-top: -8rpx;
+}
+
+.ub-step-spin {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  border: 3rpx solid var(--primary);
+  border-top-color: transparent;
+  animation: ub-spin 0.8s linear infinite;
+}
+
+.ub-step-label {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.ub-step-label.done {
+  color: #1F1B16;
+}
+
+.ub-step-label.doing {
+  color: #1F1B16;
+  font-weight: 500;
+}
+
+.ub-step-label.wait {
+  color: #9C948D;
+}
+
+/* 底部提示 */
+.ub-hint-card {
+  display: flex;
+  align-items: flex-start;
+  background: #FFF8E8;
+  border-radius: 24rpx;
+  padding: 20rpx 24rpx;
+  margin: 24rpx 32rpx 0;
+}
+
+.ub-hint-icon {
+  font-size: 28rpx;
+  margin-right: 10rpx;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.ub-hint-text {
+  font-size: 24rpx;
+  color: #B96A2F;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.ub-hint-link {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* ========== 解绑成功 ========== */
+.ub-success-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48rpx;
+  margin-bottom: 40rpx;
+}
+
+.ub-success-circle {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: #E8F5E9;
+  color: #34C759;
+  font-size: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+
+.ub-success-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 12rpx;
+}
+
+.ub-success-sub {
+  font-size: 26rpx;
+  color: #9C948D;
+}
+
+.ub-clean-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin: 0 32rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.ub-clean-title {
+  font-size: 26rpx;
+  color: #1F1B16;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.ub-clean-row {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 0;
+}
+
+.ub-clean-check {
+  color: #34C759;
+  font-size: 24rpx;
+  margin-right: 12rpx;
+}
+
+.ub-clean-text {
+  font-size: 26rpx;
+  color: #5A5450;
+}
+
+.ub-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24rpx 32rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: #F4F1EC;
+  z-index: 10;
+}
+
+.ub-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #FFFFFF;
+  background: var(--primary);
+}
+
+@keyframes ub-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

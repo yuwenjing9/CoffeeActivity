@@ -1,0 +1,139 @@
+<view wx:if="{{device}}" class="page dd-page">
+
+  <!-- 顶部信息卡片 -->
+  <view class="dd-hero-card">
+    <image class="dd-hero-avatar" src="/images/rabbit-device.png" mode="aspectFill" />
+    <view class="dd-hero-name">{{device.nickname}}</view>
+    <view class="dd-hero-status">
+      <view class="dd-hero-dot {{device.status === 'online' ? 'on' : 'off'}}"></view>
+      <text>{{device.status === 'online' ? '在线 · 已连接' : '离线'}}</text>
+    </view>
+  </view>
+
+  <!-- 状态统计 -->
+  <view class="dd-stats-row">
+    <view class="dd-stat-card">
+      <view class="dd-stat-v">{{device.status === 'online' ? device.battery + '%' : '-'}}</view>
+      <view class="dd-stat-k">电量</view>
+    </view>
+    <view class="dd-stat-card">
+      <view class="dd-stat-wifi">
+        <view class="wifi-bar {{device.status === 'online' && device.wifiRssi >= 1 ? 'on' : ''}}"></view>
+        <view class="wifi-bar {{device.status === 'online' && device.wifiRssi >= 2 ? 'on' : ''}}"></view>
+        <view class="wifi-bar {{device.status === 'online' && device.wifiRssi >= 3 ? 'on' : ''}}"></view>
+        <view class="wifi-bar {{device.status === 'online' && device.wifiRssi >= 4 ? 'on' : ''}}"></view>
+      </view>
+      <view class="dd-stat-k">Wi-Fi</view>
+    </view>
+    <view class="dd-stat-card">
+      <view class="dd-stat-v">{{device.status === 'online' ? device.temp + '°C' : '-'}}</view>
+      <view class="dd-stat-k">环境</view>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="dd-section-title">基本信息</view>
+  <view class="dd-info-card">
+    <view class="dd-row" bindtap="onEditName">
+      <text class="dd-row-k">设备昵称</text>
+      <view class="flex-row">
+        <text class="dd-row-v">{{device.nickname}}</text>
+        <text class="dd-row-arrow">›</text>
+      </view>
+    </view>
+    <view class="dd-row" bindtap="onCopySn">
+      <text class="dd-row-k">SN 序列号</text>
+      <view class="flex-row">
+        <text class="dd-row-v">{{device.sn}}</text>
+        <text class="dd-row-copy">📋</text>
+      </view>
+    </view>
+    <view class="dd-row">
+      <text class="dd-row-k">设备型号</text>
+      <text class="dd-row-v">{{device.model}}</text>
+    </view>
+    <view class="dd-row" bindtap="onUpgrade">
+      <text class="dd-row-k">固件版本</text>
+      <view class="flex-row">
+        <text class="dd-row-v">{{device.fw}}</text>
+        <view wx:if="{{device.fwNew}}" class="dd-tag-upgrade">可升级</view>
+      </view>
+    </view>
+    <view class="dd-row">
+      <text class="dd-row-k">激活日期</text>
+      <text class="dd-row-v">{{device.activeDate}}</text>
+    </view>
+  </view>
+
+  <!-- 网络 -->
+  <view class="dd-section-title">网络</view>
+  <view class="dd-info-card">
+    <view class="dd-row">
+      <text class="dd-row-k">当前 Wi-Fi</text>
+      <text class="dd-row-v">{{device.wifi || '-'}}</text>
+    </view>
+    <view class="dd-row" bindtap="onReconnect">
+      <text class="dd-row-k text-warning">重新配网</text>
+      <view class="flex-row">
+        <text class="dd-row-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 高级 -->
+  <view class="dd-section-title">高级</view>
+  <view class="dd-info-card">
+    <view class="dd-row" bindtap="onReboot">
+      <text class="dd-row-k">重启设备</text>
+      <text class="dd-row-arrow">›</text>
+    </view>
+    <view class="dd-row" bindtap="onUnbind">
+      <text class="dd-row-k text-danger">解绑设备</text>
+      <text class="dd-row-arrow text-danger">›</text>
+    </view>
+  </view>
+
+  <!-- ===== 编辑昵称弹层 ===== -->
+  <view wx:if="{{editingName}}" class="mask" catchtap="onCancelName">
+    <view class="edit-modal" catchtap="">
+      <view class="edit-title">修改昵称</view>
+      <input class="form-input" value="{{nameDraft}}" bindinput="onNameInput" maxlength="12" placeholder="请输入昵称" focus="{{true}}" />
+      <view class="edit-actions">
+        <view class="pm-btn pm-btn-ghost" catchtap="onCancelName">取消</view>
+        <view class="pm-btn pm-btn-primary" catchtap="onSaveName">保存</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 解绑底部动作面板 ===== -->
+  <view wx:if="{{showUnbindSheet}}" class="mask" catchtap="onCloseUnbind">
+    <view class="sheet" catchtap="">
+      <view class="unbind-icon-wrap">
+        <view class="unbind-icon">!</view>
+      </view>
+      <view class="unbind-title">解绑小伙伴</view>
+      <view class="unbind-desc">
+        <view>解绑后将<text class="unbind-highlight">自动初始化设备</text>，</view>
+        <view>清除全部本地陪伴数据、</view>
+        <view>Wi-Fi 配置与个性化偏好，</view>
+        <view class="unbind-gray">且无法恢复</view>
+      </view>
+      <view class="unbind-tip">
+        <view>如希望转让设备，</view>
+        <view>请先解绑后再让新用户绑定。</view>
+      </view>
+
+      <view class="sheet-check" catchtap="onToggleUnbindCheck">
+        <view class="pm-check {{unbindChecked ? 'on' : ''}}">
+          <text wx:if="{{unbindChecked}}">✓</text>
+        </view>
+        <text class="sheet-check-text">我已知晓上述风险</text>
+      </view>
+
+      <view class="sheet-actions">
+        <view class="pm-btn pm-btn-ghost" catchtap="onCloseUnbind">取消</view>
+        <view class="pm-btn pm-btn-danger {{unbindChecked ? '' : 'dis'}}" catchtap="onConfirmUnbind">确认解绑</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "添加设备",
+  "usingComponents": {
+    "step-indicator": "/components/step-indicator/step-indicator",
+    "loading-toast": "/components/loading-toast/loading-toast"
+  }
+}

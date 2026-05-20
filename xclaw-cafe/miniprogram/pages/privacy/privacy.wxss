@@ -1,0 +1,46 @@
+.pv-page {
+  padding-top: 24rpx;
+  padding-bottom: 60rpx;
+}
+
+.pf-group {
+  margin-top: 24rpx;
+}
+
+.pf-group-title {
+  font-size: 24rpx;
+  color: #9C948D;
+  padding: 0 12rpx 12rpx;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #F4F1EC;
+}
+
+.row.no-bd {
+  border-bottom: none;
+}
+
+.row-k {
+  font-size: 28rpx;
+  color: #1F1B16;
+}
+
+.row-sub {
+  font-size: 24rpx;
+  color: #9C948D;
+}
+
+.row-arrow {
+  color: #9C948D;
+  font-size: 36rpx;
+  margin-left: 10rpx;
+}
+
+.text-danger {
+  color: var(--danger);
+}

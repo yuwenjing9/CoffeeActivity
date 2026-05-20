@@ -1,0 +1,276 @@
+.login-page {
+  min-height: 100vh;
+  background: #F4F1EC;
+  box-sizing: border-box;
+}
+
+/* Hero：四周悬浮的圆角卡片 */
+.hero {
+  margin: 40rpx 32rpx 0;
+  border-radius: 36rpx;
+  background: linear-gradient(to bottom right, #ffd2b9 0%, #ff8248 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 70rpx 0 70rpx;
+  box-shadow: 0 12rpx 40rpx rgba(255, 122, 61, 0.18);
+}
+
+/* 头像外圈（半透明白光晕） */
+.hero-avatar-ring {
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: #ffdbc8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60rpx;
+}
+
+.hero-avatar {
+  width: 230rpx;
+  height: 230rpx;
+  border-radius: 50%;
+  background: #ffcbb0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-emoji {
+  font-size: 130rpx;
+  line-height: 1;
+}
+
+.hero-title {
+  color: #FFFFFF;
+  font-size: 52rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  margin-bottom: 16rpx;
+  text-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.hero-sub {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 26rpx;
+  letter-spacing: 1rpx;
+}
+
+/* 登录区 */
+.login-actions {
+  padding: 80rpx 48rpx 0;
+}
+
+.login-btn {
+  width: 500rpx !important;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  background: #2BB54A;
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-shadow: 0 8rpx 20rpx rgba(43, 181, 74, 0.25);
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.login-icon {
+  margin-right: 14rpx;
+  font-size: 32rpx;
+}
+
+/* 协议勾选 */
+.agree-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 32rpx;
+  font-size: 24rpx;
+  color: #5A5450;
+  line-height: 1.6;
+}
+
+.check {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 8rpx;
+  border: 2rpx solid #C7BFB8;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10rpx;
+}
+
+.check.on {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.check-tick {
+  color: #FFFFFF;
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.agree-text {
+  color: #5A5450;
+}
+
+.link {
+  color: var(--primary);
+}
+
+/* ========== 微信授权弹窗 ========== */
+.auth-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 90;
+  pointer-events: none;
+  transition: background .25s ease;
+}
+
+.auth-mask.show {
+  background: rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+}
+
+.auth-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 91;
+  background: #FFFFFF;
+  border-radius: 28rpx 28rpx 0 0;
+  padding: 48rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform .3s ease;
+}
+
+.auth-sheet.show {
+  transform: translateY(0);
+}
+
+.auth-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  text-align: center;
+  margin-bottom: 36rpx;
+}
+
+/* 用户卡片 */
+.auth-card {
+  display: flex;
+  align-items: center;
+  background: #F7F7F7;
+  border-radius: 20rpx;
+  padding: 28rpx 32rpx;
+}
+
+.auth-card-avatar {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background: #FFE8B8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.auth-card-emoji {
+  font-size: 56rpx;
+  line-height: 1;
+}
+
+.auth-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.auth-card-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 8rpx;
+}
+
+/* 昵称输入框（type="nickname"） */
+.auth-card-name-input {
+  width: 100%;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 6rpx;
+  padding: 0;
+  background: transparent;
+}
+
+.auth-card-name-ph {
+  color: #B5B5B5;
+  font-weight: 400;
+}
+
+.auth-card-desc {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.auth-tip {
+  font-size: 24rpx;
+  color: #999999;
+  line-height: 1.6;
+  margin-top: 32rpx;
+  margin-bottom: 48rpx;
+}
+
+/* 拒绝 / 允许按钮 */
+.auth-actions {
+  display: flex;
+  gap: 24rpx;
+}
+
+.auth-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.auth-btn::after {
+  border: none;
+}
+
+.auth-btn.deny {
+  background: #FFFFFF;
+  color: #1A1A1A;
+  border: 2rpx solid #E5E5E5;
+}
+
+.auth-btn.allow {
+  background: #07C160;
+  color: #FFFFFF;
+}

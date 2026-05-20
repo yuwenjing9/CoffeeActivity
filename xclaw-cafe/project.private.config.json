@@ -1,12 +1,12 @@
 {
   "setting": {
-    "compileHotReLoad": true,
+    "compileHotReLoad": false,
     "urlCheck": false,
     "coverView": true,
     "lazyloadPlaceholderEnable": false,
     "skylineRenderEnable": false,
-    "preloadBackgroundData": true,
-    "autoAudits": false,
+    "preloadBackgroundData": false,
+    "autoAudits": true,
     "useApiHook": true,
     "useApiHostProcess": true,
     "showShadowRootInWxmlPanel": true,
@@ -22,11 +22,74 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/product/list",
-          "pathName": "pages/product/list",
+          "name": "pages/device/device",
+          "pathName": "pages/device/device",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "pages/device-detail/device-detail",
+          "pathName": "pages/device-detail/device-detail",
+          "query": "id=d2",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/device/device",
+          "pathName": "pages/device/device",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/device-detail/device-detail",
+          "pathName": "pages/device-detail/device-detail",
+          "query": "id=d2",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/device/device",
+          "pathName": "pages/device/device",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/add-device/add-device",
+          "pathName": "pages/add-device/add-device",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/login/login",
+          "pathName": "pages/login/login",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/wifi-test/wifi-test",
+          "pathName": "pages/wifi-test/wifi-test",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/device/device",
+          "pathName": "pages/device/device",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/product/list",
+          "pathName": "pages/product/list",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "pages/index/index",
@@ -39,6 +102,6 @@
     }
   },
   "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
-  "projectname": "xclaw-cafe",
-  "libVersion": "3.15.0"
+  "projectname": "emotional-companion",
+  "libVersion": "3.15.2"
 }

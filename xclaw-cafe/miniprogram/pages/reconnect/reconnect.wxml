@@ -1,0 +1,109 @@
+<view class="page rc-page">
+
+  <!-- ===== 第1屏：准备页（原型图） ===== -->
+  <block wx:if="{{step === 1}}">
+
+    <!-- 信息提示 -->
+    <view class="rc-info-card">
+      <view class="rc-info-icon">i</view>
+      <view class="rc-info-body">
+        重新配网仅更新 Wi-Fi，<text class="rc-bold">不会影响绑定关系</text>，也不会清除陪伴数据。
+      </view>
+    </view>
+
+    <!-- 当前设备 -->
+    <view class="rc-section-title">当前设备</view>
+    <view class="rc-device-card">
+      <view class="rc-avatar">🐰</view>
+      <view class="rc-device-info">
+        <view class="rc-name">{{device.nickname}}</view>
+        <view class="rc-sn">SN: {{device.sn}}</view>
+      </view>
+      <view class="rc-status">
+        <view class="rc-status-dot"></view>
+        <text class="rc-status-text">在线</text>
+      </view>
+    </view>
+
+    <!-- 操作步骤 -->
+    <view class="rc-section-title">操作步骤</view>
+    <view class="rc-steps-card">
+      <view class="rc-step-row">
+        <view class="rc-step-no">1</view>
+        <text class="rc-step-text">长按小伙伴头部 3 秒</text>
+      </view>
+      <view class="rc-step-row">
+        <view class="rc-step-no">2</view>
+        <text class="rc-step-text">等待蓝灯慢闪</text>
+      </view>
+      <view class="rc-step-row">
+        <view class="rc-step-no">3</view>
+        <text class="rc-step-text">点击下方按钮重新配网</text>
+      </view>
+    </view>
+
+    <!-- 底部按钮（固定） -->
+    <view class="rc-footer">
+      <view class="rc-btn {{scanning ? 'disabled' : ''}}" bindtap="onStartReconnect">开始重新配网</view>
+    </view>
+
+  </block>
+
+  <!-- ===== 第2屏：配置 Wi-Fi ===== -->
+  <block wx:if="{{step === 2}}">
+    <view class="card mt-16">
+      <view class="card-title">配置 Wi-Fi</view>
+      <view class="hint">仅支持 2.4GHz Wi-Fi</view>
+
+      <view class="form-item">
+        <view class="form-label">Wi-Fi 名称（SSID）</view>
+        <input class="form-input" value="{{ssid}}" bindinput="onSsidInput" placeholder="请输入 Wi-Fi 名称" />
+        <view wx:if="{{is5G}}" class="form-error">⚠️ 检测到 5GHz 频段，请切换到 2.4G</view>
+      </view>
+
+      <view class="form-item">
+        <view class="form-label">Wi-Fi 密码</view>
+        <view class="form-input-row">
+          <input class="form-input flex-1" value="{{password}}" password="{{!showPwd}}" bindinput="onPwdInput" placeholder="请输入 Wi-Fi 密码" />
+          <text class="form-eye" catchtap="onTogglePwd">{{showPwd ? '🙈' : '👁'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="rc-footer">
+      <view class="rc-btn {{(is5G || !ssid || !password) ? 'disabled' : ''}}" bindtap="onStart">开始配网</view>
+    </view>
+  </block>
+
+  <!-- ===== 第3屏：执行中 ===== -->
+  <block wx:if="{{step === 3}}">
+    <view class="card mt-16" style="padding-top:48rpx">
+      <view class="big-title" style="text-align:center">正在配网...</view>
+      <view class="hint" style="text-align:center">请保持设备靠近手机，不要关闭小程序</view>
+
+      <view class="prov-list mt-32">
+        <view wx:for="{{provSteps}}" wx:key="label" class="prov-item">
+          <view class="prov-dot {{item.status}}">
+            <text wx:if="{{item.status === 'done'}}">✓</text>
+            <view wx:elif="{{item.status === 'doing'}}" class="prov-spin"></view>
+            <text wx:else>{{index + 1}}</text>
+          </view>
+          <text class="prov-text {{item.status}}">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ===== 第4屏：完成 ===== -->
+  <block wx:if="{{step === 4}}">
+    <view class="card mt-16" style="text-align:center; padding-top:48rpx;">
+      <view style="font-size:100rpx">🎉</view>
+      <view class="big-title" style="text-align:center; margin-top:16rpx;">配网成功</view>
+      <view class="hint" style="text-align:center;">设备已连接到 {{ssid}}</view>
+    </view>
+    <view class="rc-footer">
+      <view class="rc-btn" bindtap="onBack">返回设备详情</view>
+    </view>
+  </block>
+
+</view>

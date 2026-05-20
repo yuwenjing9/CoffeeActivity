@@ -1,0 +1,64 @@
+.si {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0 32rpx;
+}
+
+.si-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.si-dot {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #fff;
+  color: #9c948d;
+  border: 4rpx solid #e8e2d8;
+  font-size: 24rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10rpx;
+}
+
+.si-dot.done {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.si-dot.active {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.si-text {
+  font-size: 22rpx;
+  color: #9C948D;
+}
+
+.si-text.done {
+  color: var(--primary);
+}
+
+.si-text.active {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.si-line {
+  flex: 1;
+  height: 4rpx;
+  background: #E8E2D8;
+  margin: 0 0 32rpx;
+  border-radius: 2rpx;
+}
+
+.si-line.done {
+  background: var(--primary);
+}

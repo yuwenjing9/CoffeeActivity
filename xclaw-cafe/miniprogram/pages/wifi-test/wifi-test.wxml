@@ -1,0 +1,64 @@
+<view class="wt-page">
+
+  <!-- 系统信息卡片 -->
+  <view class="wt-card">
+    <view class="wt-card-title">系统信息</view>
+    <view class="wt-row">
+      <text class="wt-k">平台：</text>
+      <text class="wt-v">{{platform || '-'}}</text>
+    </view>
+    <view class="wt-row">
+      <text class="wt-k">基础库：</text>
+      <text class="wt-v">{{SDKVersion}}</text>
+    </view>
+    <view class="wt-row">
+      <text class="wt-k">微信版本：</text>
+      <text class="wt-v">{{wxVersion}}</text>
+    </view>
+    <view class="wt-row">
+      <text class="wt-k">WiFi状态：</text>
+      <text class="wt-v {{isWifiStarted ? 'ok' : 'warn'}}">{{isWifiStarted ? '已初始化' : '未初始化'}}</text>
+    </view>
+  </view>
+
+  <!-- API 测试操作 -->
+  <view class="wt-card">
+    <view class="wt-card-title">API 测试操作</view>
+    <view class="wt-btns">
+      <button class="wt-btn {{isWifiStarted ? 'disabled' : ''}}" bindtap="startWifi" disabled="{{isWifiStarted}}">1. startWifi 初始化</button>
+      <button class="wt-btn {{!isWifiStarted ? 'disabled' : ''}}" bindtap="getWifiList" disabled="{{!isWifiStarted}}">2. getWifiList 周边WiFi</button>
+      <button class="wt-btn {{!isWifiStarted ? 'disabled' : ''}}" bindtap="getConnectedWifi" disabled="{{!isWifiStarted}}">3. getConnectedWifi 当前WiFi</button>
+      <button class="wt-btn {{!isWifiStarted ? 'disabled' : ''}}" bindtap="stopWifi" disabled="{{!isWifiStarted}}">停止WiFi模块</button>
+    </view>
+  </view>
+
+  <!-- 已连接 WiFi -->
+  <view class="wt-card" wx:if="{{connectedWifi}}">
+    <view class="wt-card-title">已连接WiFi</view>
+    <view class="wt-row"><text class="wt-k">SSID：</text><text class="wt-v">{{connectedWifi.SSID}}</text></view>
+    <view class="wt-row"><text class="wt-k">BSSID：</text><text class="wt-v">{{connectedWifi.BSSID}}</text></view>
+    <view class="wt-row"><text class="wt-k">信号：</text><text class="wt-v">{{connectedWifi.signalStrength}}</text></view>
+  </view>
+
+  <!-- 周边 WiFi 列表 -->
+  <view class="wt-card" wx:if="{{wifiList.length > 0}}">
+    <view class="wt-card-title">周边WiFi（{{wifiList.length}}）</view>
+    <view class="wt-wifi-item" wx:for="{{wifiList}}" wx:key="BSSID">
+      <text class="wt-wifi-ssid">{{item.SSID || '(隐藏SSID)'}}</text>
+      <text class="wt-wifi-sig">{{item.signalStrength}}</text>
+    </view>
+  </view>
+
+  <!-- 运行日志 -->
+  <view class="wt-card">
+    <view class="wt-log-header">
+      <text class="wt-card-title">运行日志</text>
+      <view class="wt-clear" bindtap="clearLogs">清除</view>
+    </view>
+    <view class="wt-log-box">
+      <view class="wt-log-line" wx:for="{{logs}}" wx:key="index">{{item}}</view>
+      <view class="wt-log-empty" wx:if="{{logs.length === 0}}">暂无日志</view>
+    </view>
+  </view>
+
+</view>

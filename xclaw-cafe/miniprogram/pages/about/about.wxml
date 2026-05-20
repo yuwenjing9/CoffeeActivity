@@ -1,0 +1,81 @@
+<view class="page ab-page">
+
+  <view class="ab-brand">
+    <view class="ab-logo">🐰</view>
+    <view class="ab-name">AI 情绪小伙伴</view>
+    <view class="ab-ver">版本 v{{version}}</view>
+  </view>
+
+  <view class="pf-group">
+    <view class="pf-group-title">版本信息</view>
+    <view class="card">
+      <view class="row">
+        <text class="row-k">小程序版本</text>
+        <text class="row-sub">v{{version}}</text>
+      </view>
+      <view class="row">
+        <text class="row-k">基础库版本</text>
+        <text class="row-sub">{{sdkVersion}}</text>
+      </view>
+      <view class="row" bindtap="onCheckUpdate">
+        <text class="row-k">检查更新</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row no-bd" data-type="changelog" bindtap="goLink">
+        <text class="row-k">更新日志</text><text class="row-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="pf-group">
+    <view class="pf-group-title">企业信息</view>
+    <view class="card">
+      <view class="row">
+        <text class="row-k">公司主体</text>
+        <text class="row-sub">XX 科技有限公司</text>
+      </view>
+      <view class="row">
+        <text class="row-k">ICP 备案</text>
+        <text class="row-sub">京ICP备XXXXXXXX号</text>
+      </view>
+      <view class="row no-bd">
+        <text class="row-k">公安备案</text>
+        <text class="row-sub">京公网安备 XXXXXXXXXXXXX</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="pf-group">
+    <view class="pf-group-title">联系我们</view>
+    <view class="card">
+      <view class="row">
+        <text class="row-k">客服热线</text>
+        <text class="row-sub">400-123-4567</text>
+      </view>
+      <view class="row">
+        <text class="row-k">邮箱</text>
+        <text class="row-sub">support@example.com</text>
+      </view>
+      <view class="row no-bd">
+        <text class="row-k">地址</text>
+        <text class="row-sub">北京市海淀区</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="pf-group">
+    <view class="pf-group-title">其他</view>
+    <view class="card">
+      <view class="row" data-type="oss" bindtap="goLink">
+        <text class="row-k">开源许可</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row" data-type="user" bindtap="goLink">
+        <text class="row-k">用户协议</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row no-bd" data-type="privacy" bindtap="goLink">
+        <text class="row-k">隐私政策</text><text class="row-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="ab-foot">© 2026 腾讯科技 · All Rights Reserved</view>
+</view>

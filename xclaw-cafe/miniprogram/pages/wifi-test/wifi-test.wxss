@@ -1,0 +1,147 @@
+page {
+  background: #F5F5F5;
+}
+
+.wt-page {
+  padding: 24rpx 24rpx 60rpx;
+}
+
+/* 卡片 */
+.wt-card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 28rpx 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.wt-card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2A2A2A;
+  margin-bottom: 8rpx;
+}
+
+/* 系统信息行 */
+.wt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.wt-row:last-child {
+  border-bottom: 0;
+}
+
+.wt-k {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.wt-v {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.wt-v.warn {
+  color: #C17817;
+  font-weight: 500;
+}
+
+.wt-v.ok {
+  color: #2BB673;
+  font-weight: 500;
+}
+
+/* 操作按钮 */
+.wt-btns {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  padding-top: 16rpx;
+}
+
+.wt-btn {
+  width: 70%;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #FFFFFF;
+  background: #6B4423;
+  border-radius: 12rpx;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.wt-btn::after {
+  border: none;
+}
+
+.wt-btn.disabled,
+.wt-btn[disabled] {
+  background: #E8E8E8 !important;
+  color: #BFBFBF !important;
+}
+
+/* 日志 */
+.wt-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.wt-clear {
+  font-size: 24rpx;
+  color: #666666;
+  background: #F2EFEA;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.wt-log-box {
+  min-height: 80rpx;
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+.wt-log-line {
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: #333333;
+  word-break: break-all;
+  font-family: Menlo, Consolas, monospace;
+}
+
+.wt-log-empty {
+  font-size: 24rpx;
+  color: #999999;
+  padding: 12rpx 0;
+}
+
+/* 周边 WiFi 列表 */
+.wt-wifi-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F0F0F0;
+}
+
+.wt-wifi-item:last-child {
+  border-bottom: 0;
+}
+
+.wt-wifi-ssid {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.wt-wifi-sig {
+  font-size: 24rpx;
+  color: #999999;
+}

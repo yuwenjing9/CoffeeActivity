@@ -1,0 +1,99 @@
+.dc {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.dc-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 24rpx;
+  background: #FFE7D9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.dc-avatar.off {
+  background: #E8E2D8;
+}
+
+.dc-avatar-img {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+}
+
+.dc-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dc-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 10rpx;
+}
+
+.dc-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F1B16;
+}
+
+.dc-status-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999rpx;
+  padding: 4rpx 12rpx;
+  font-size: 20rpx;
+  gap: 6rpx;
+}
+
+.dc-status-tag.online {
+  background: #E8F5E9;
+  color: #34C759;
+}
+
+.dc-status-tag.offline {
+  background: #F4F1EC;
+  color: #9C948D;
+}
+
+.dc-status-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+}
+
+.dc-status-tag.online .dc-status-dot {
+  background: #34C759;
+}
+
+.dc-status-tag.offline .dc-status-dot {
+  background: #9C948D;
+}
+
+.dc-meta {
+  display: flex;
+  align-items: center;
+  color: #9C948D;
+  font-size: 24rpx;
+}
+
+.dc-sep {
+  margin: 0 12rpx;
+}
+
+.dc-arrow {
+  color: #9C948D;
+  font-size: 36rpx;
+  margin-left: 10rpx;
+}

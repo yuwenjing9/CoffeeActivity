@@ -1,0 +1,53 @@
+<view class="page ub-page">
+
+  <!-- 执行中 -->
+  <block wx:if="{{!success}}">
+    <view class="ub-warn-wrap">
+      <view class="ub-warn-ring ring1"></view>
+      <view class="ub-warn-ring ring2"></view>
+      <view class="ub-warn-ring ring3"></view>
+      <view class="ub-warn-core">
+        <text class="ub-warn-icon">⚠️</text>
+      </view>
+    </view>
+    <view class="ub-title">正在解绑设备...</view>
+    <view class="ub-sub">设备将清除本地数据并恢复出厂</view>
+
+    <view class="ub-steps-card">
+      <view wx:for="{{steps}}" wx:key="label" class="ub-step-row">
+        <view class="ub-step-badge {{item.status}}">
+          <text wx:if="{{item.status === 'done'}}" class="ub-step-txt done">✓</text>
+          <view wx:elif="{{item.status === 'doing'}}" class="ub-step-spin"></view>
+          <text wx:else class="ub-step-txt wait">·</text>
+        </view>
+        <text class="ub-step-label {{item.status}}">{{item.label}}</text>
+      </view>
+    </view>
+
+    <view class="ub-hint-card" bindtap="onForce">
+      <text class="ub-hint-icon">⚠️</text>
+      <text class="ub-hint-text">若设备 60 秒内未回执，将提供<text class="ub-hint-link">「强制解绑」</text>入口，设备下次联网时自动初始化。</text>
+    </view>
+  </block>
+
+  <!-- 成功 -->
+  <block wx:else>
+    <view class="ub-success-wrap">
+      <view class="ub-success-circle">✓</view>
+      <view class="ub-success-title">已成功解绑</view>
+      <view class="ub-success-sub">设备已恢复出厂状态，可被新的用户重新绑定</view>
+    </view>
+
+    <view class="ub-clean-card">
+      <view class="ub-clean-title">已清除内容</view>
+      <view wx:for="{{cleanItems}}" wx:key="*this" class="ub-clean-row">
+        <text class="ub-clean-check">✓</text>
+        <text class="ub-clean-text">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="ub-footer">
+      <view class="ub-btn" bindtap="onBack">返回设备列表</view>
+    </view>
+  </block>
+</view>

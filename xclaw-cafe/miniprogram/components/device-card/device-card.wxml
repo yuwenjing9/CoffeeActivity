@@ -1,0 +1,22 @@
+<view class="dc" bindtap="onTap">
+  <view class="dc-avatar {{device.status === 'offline' ? 'off' : ''}}">
+    <image class="dc-avatar-img" src="/images/rabbit-device.png" mode="aspectFill" />
+  </view>
+
+  <view class="dc-info">
+    <view class="dc-name-row">
+      <text class="dc-name">{{device.nickname}}</text>
+      <view class="dc-status-tag {{device.status === 'online' ? 'online' : 'offline'}}">
+        <view class="dc-status-dot"></view>
+        <text>{{device.status === 'online' ? '在线' : '离线'}}</text>
+      </view>
+    </view>
+    <view class="dc-meta">
+      <text>SN · {{device.sn ? device.sn : ''}}</text>
+      <text class="dc-sep">|</text>
+      <text>{{device.status === 'online' ? ('电量 ' + device.battery + '%') : '已离线2小时'}}</text>
+    </view>
+  </view>
+
+  <text class="dc-arrow">›</text>
+</view>

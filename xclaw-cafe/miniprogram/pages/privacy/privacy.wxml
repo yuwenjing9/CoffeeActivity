@@ -1,0 +1,57 @@
+<view class="page pv-page">
+
+  <view class="pf-group">
+    <view class="pf-group-title">合规清单</view>
+    <view class="card">
+      <view class="row" data-type="collect" bindtap="goLink">
+        <text class="row-k">个人信息明示清单</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row" data-type="share" bindtap="goLink">
+        <text class="row-k">第三方信息共享清单</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row" data-type="perm" bindtap="goLink">
+        <text class="row-k">应用权限说明</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row no-bd" data-type="cookie" bindtap="goLink">
+        <text class="row-k">Cookie 使用说明</text><text class="row-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="pf-group">
+    <view class="pf-group-title">权限管理</view>
+    <view class="card">
+      <view class="row" bindtap="openSetting">
+        <text class="row-k">蓝牙</text>
+        <text class="row-sub">{{auth.bluetooth}} ›</text>
+      </view>
+      <view class="row" bindtap="openSetting">
+        <text class="row-k">位置信息</text>
+        <text class="row-sub">{{auth.location}} ›</text>
+      </view>
+      <view class="row" bindtap="openSetting">
+        <text class="row-k">消息通知</text>
+        <text class="row-sub">{{auth.notification}} ›</text>
+      </view>
+      <view class="row no-bd" bindtap="openSetting">
+        <text class="row-k">相册</text>
+        <text class="row-sub">{{auth.album}} ›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="pf-group">
+    <view class="pf-group-title">数据控制</view>
+    <view class="card">
+      <view class="row" bindtap="onRevoke">
+        <text class="row-k">撤回授权</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row" bindtap="onExport">
+        <text class="row-k">导出我的数据</text><text class="row-arrow">›</text>
+      </view>
+      <view class="row no-bd" bindtap="onLogoff">
+        <text class="row-k text-danger">注销账号</text><text class="row-arrow text-danger">›</text>
+      </view>
+    </view>
+  </view>
+</view>

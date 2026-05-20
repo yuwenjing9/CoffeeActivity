@@ -1,0 +1,12 @@
+<view class="si">
+  <block wx:for="{{steps}}" wx:key="index">
+    <view class="si-item">
+      <view class="si-dot {{index + 1 < current ? 'done' : ''}} {{index + 1 === current ? 'active' : ''}}">
+        <text wx:if="{{index + 1 < current}}">✓</text>
+        <text wx:else>{{index + 1}}</text>
+      </view>
+      <text class="si-text {{index + 1 < current ? 'done' : ''}} {{index + 1 === current ? 'active' : ''}}">{{item}}</text>
+    </view>
+    <view wx:if="{{index < steps.length - 1}}" class="si-line {{index + 1 < current ? 'done' : ''}}"></view>
+  </block>
+</view>
