@@ -1,10 +1,10 @@
 Page({
   data: {
     auth: {
-      bluetooth: '未知',
-      location: '未知',
-      notification: '未知',
-      album: '未知'
+      bluetooth: '未开启',
+      location: '未开启',
+      notification: '未开启',
+      album: '未开启'
     }
   },
 
@@ -16,7 +16,7 @@ Page({
     wx.getSetting({
       success: (res) => {
         const s = res.authSetting || {};
-        const fmt = (v) => v === true ? '已授权' : (v === false ? '已拒绝' : '未询问');
+        const fmt = (v) => v === true ? '已授权' : '未开启';
         this.setData({
           auth: {
             bluetooth: fmt(s['scope.bluetooth']),

@@ -1,23 +1,33 @@
 .pv-page {
-  padding-top: 24rpx;
+  padding-top: 16rpx;
   padding-bottom: 60rpx;
 }
 
 .pf-group {
-  margin-top: 24rpx;
+  margin-top: 32rpx;
+}
+
+.pf-group:first-child {
+  margin-top: 16rpx;
 }
 
 .pf-group-title {
   font-size: 24rpx;
   color: #9C948D;
-  padding: 0 12rpx 12rpx;
+  padding: 0 8rpx 16rpx;
 }
 
+/* 卡片内边距 */
+.pv-page .card {
+  padding: 0 24rpx;
+}
+
+/* 行布局 */
 .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24rpx 0;
+  padding: 26rpx 0;
   border-bottom: 1rpx solid #F4F1EC;
 }
 
@@ -25,22 +35,87 @@
   border-bottom: none;
 }
 
+.row-left {
+  display: flex;
+  align-items: center;
+}
+
+.row-right {
+  display: flex;
+  align-items: center;
+}
+
+/* 图标 */
+.icon-wrap {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.icon-img {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.icon-doc { background: #FFF5EE; }
+.icon-link { background: #FFF5EE; }
+.icon-shield { background: #FFF5EE; }
+.icon-cookie { background: #FFF5EE; }
+.icon-bluetooth { background: #F0F0FF; }
+.icon-location { background: #FFF0F5; }
+.icon-bell { background: #FFF8E7; }
+.icon-album { background: #F0F0FF; }
+.icon-revoke { background: #E8F4FF; }
+.icon-export { background: #FFF0F5; }
+.icon-logoff { background: #FFEEEE; }
+
+/* 文字 */
 .row-k {
   font-size: 28rpx;
   color: #1F1B16;
 }
 
-.row-sub {
-  font-size: 24rpx;
-  color: #9C948D;
-}
-
 .row-arrow {
-  color: #9C948D;
-  font-size: 36rpx;
-  margin-left: 10rpx;
+  color: #C8C0B8;
+  font-size: 28rpx;
+  margin-left: 4rpx;
 }
 
+/* 状态文字 */
+.row-status {
+  font-size: 26rpx;
+  margin-right: 8rpx;
+}
+
+.status-on {
+  color: #2BB673;
+}
+
+.status-off {
+  color: #9C948D;
+}
+
+/* 状态圆点 */
+.status-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+}
+
+.dot-on {
+  background: #2BB673;
+}
+
+.dot-off {
+  background: #C8C0B8;
+}
+
+/* 危险文字 */
 .text-danger {
-  color: var(--danger);
+  color: #E94B3C;
 }

@@ -1,56 +1,133 @@
 <view class="page pv-page">
 
+  <!-- 合规清单 -->
   <view class="pf-group">
     <view class="pf-group-title">合规清单</view>
     <view class="card">
       <view class="row" data-type="collect" bindtap="goLink">
-        <text class="row-k">个人信息明示清单</text><text class="row-arrow">›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-doc">
+            <image class="icon-img" src="/images/privacy/doc.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">收集个人信息明示清单</text>
+        </view>
+        <text class="row-arrow">›</text>
       </view>
       <view class="row" data-type="share" bindtap="goLink">
-        <text class="row-k">第三方信息共享清单</text><text class="row-arrow">›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-link">
+            <image class="icon-img" src="/images/privacy/link.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">第三方信息共享清单</text>
+        </view>
+        <text class="row-arrow">›</text>
       </view>
       <view class="row" data-type="perm" bindtap="goLink">
-        <text class="row-k">应用权限说明</text><text class="row-arrow">›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-shield">
+            <image class="icon-img" src="/images/privacy/shield.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">应用权限说明</text>
+        </view>
+        <text class="row-arrow">›</text>
       </view>
       <view class="row no-bd" data-type="cookie" bindtap="goLink">
-        <text class="row-k">Cookie 使用说明</text><text class="row-arrow">›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-cookie">
+            <image class="icon-img" src="/images/privacy/cookie.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">Cookie 使用说明</text>
+        </view>
+        <text class="row-arrow">›</text>
       </view>
     </view>
   </view>
 
+  <!-- 权限管理 -->
   <view class="pf-group">
     <view class="pf-group-title">权限管理</view>
     <view class="card">
       <view class="row" bindtap="openSetting">
-        <text class="row-k">蓝牙</text>
-        <text class="row-sub">{{auth.bluetooth}} ›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-bluetooth">
+            <image class="icon-img" src="/images/privacy/bluetooth.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">蓝牙</text>
+        </view>
+        <view class="row-right">
+          <text class="row-status {{auth.bluetooth === '已授权' ? 'status-on' : 'status-off'}}">{{auth.bluetooth}}</text>
+          <view class="status-dot {{auth.bluetooth === '已授权' ? 'dot-on' : 'dot-off'}}"></view>
+        </view>
       </view>
       <view class="row" bindtap="openSetting">
-        <text class="row-k">位置信息</text>
-        <text class="row-sub">{{auth.location}} ›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-location">
+            <image class="icon-img" src="/images/privacy/location.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">位置信息</text>
+        </view>
+        <view class="row-right">
+          <text class="row-status {{auth.location === '已授权' ? 'status-on' : 'status-off'}}">{{auth.location}}</text>
+          <view class="status-dot {{auth.location === '已授权' ? 'dot-on' : 'dot-off'}}"></view>
+        </view>
       </view>
       <view class="row" bindtap="openSetting">
-        <text class="row-k">消息通知</text>
-        <text class="row-sub">{{auth.notification}} ›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-bell">
+            <image class="icon-img" src="/images/privacy/bell.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">消息通知</text>
+        </view>
+        <view class="row-right">
+          <text class="row-status {{auth.notification === '已授权' ? 'status-on' : 'status-off'}}">{{auth.notification}}</text>
+          <view class="status-dot {{auth.notification === '已授权' ? 'dot-on' : 'dot-off'}}"></view>
+        </view>
       </view>
       <view class="row no-bd" bindtap="openSetting">
-        <text class="row-k">相册</text>
-        <text class="row-sub">{{auth.album}} ›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-album">
+            <image class="icon-img" src="/images/privacy/album.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">相册（设备头像）</text>
+        </view>
+        <view class="row-right">
+          <text class="row-status {{auth.album === '已授权' ? 'status-on' : 'status-off'}}">{{auth.album}}</text>
+          <view class="status-dot {{auth.album === '已授权' ? 'dot-on' : 'dot-off'}}"></view>
+        </view>
       </view>
     </view>
   </view>
 
+  <!-- 数据控制 -->
   <view class="pf-group">
     <view class="pf-group-title">数据控制</view>
     <view class="card">
       <view class="row" bindtap="onRevoke">
-        <text class="row-k">撤回授权</text><text class="row-arrow">›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-revoke">
+            <image class="icon-img" src="/images/privacy/revoke.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">撤回授权</text>
+        </view>
+        <text class="row-arrow">›</text>
       </view>
       <view class="row" bindtap="onExport">
-        <text class="row-k">导出我的数据</text><text class="row-arrow">›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-export">
+            <image class="icon-img" src="/images/privacy/export.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k">导出我的数据</text>
+        </view>
+        <text class="row-arrow">›</text>
       </view>
       <view class="row no-bd" bindtap="onLogoff">
-        <text class="row-k text-danger">注销账号</text><text class="row-arrow text-danger">›</text>
+        <view class="row-left">
+          <view class="icon-wrap icon-logoff">
+            <image class="icon-img" src="/images/privacy/logoff.png" mode="aspectFit"/>
+          </view>
+          <text class="row-k text-danger">注销账号</text>
+        </view>
+        <text class="row-arrow text-danger">›</text>
       </view>
     </view>
   </view>
