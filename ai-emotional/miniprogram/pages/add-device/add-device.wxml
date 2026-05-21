@@ -1,0 +1,359 @@
+<view class="page add-page">
+
+  <step-indicator wx:if="{{step !== 5 && !showBleModal && !showBindFail}}" steps="{{stepLabels}}" current="{{step <= 2 ? 1 : (step === 3 ? 2 : (step <= 5 ? 3 : 5))}}" />
+
+  <!-- ========== 步骤1 准备 ========== -->
+  <block wx:if="{{step === 1}}">
+    <!-- 兔子插画 -->
+    <view class="prep-illust">
+      <image class="prep-rabbit" src="/images/rabbit-device.png" mode="aspectFit" />
+    </view>
+
+    <!-- 标题和描述 -->
+    <view class="prep-title">让小伙伴进入配网模式</view>
+    <view class="prep-desc">
+      <view>长按小伙伴头部按钮 <text class="prep-num">3秒</text>，</view>
+      <view>等待耳朵指示灯 <text class="prep-highlight">蓝色慢闪</text> 后点击下一步</view>
+    </view>
+
+    <!-- 提示卡片 -->
+    <view class="prep-tip-card">
+      <text class="prep-tip-icon">⚠️</text>
+      <text class="prep-tip-text">仅支持 <text class="prep-tip-bold">2.4GHz Wi-Fi</text>，请确保手机已连接 Wi-Fi 并打开蓝牙</text>
+    </view>
+
+    <!-- 底部固定按钮 -->
+    <view class="prep-footer">
+      <view class="wifi-btn" bindtap="onReadyNext">指示灯已蓝色慢闪</view>
+    </view>
+  </block>
+
+  <!-- ========== 步骤2 蓝牙权限弹层 ========== -->
+  <view wx:if="{{showBleModal}}" class="mask">
+    <view class="ble-modal" catchtap="">
+      <view class="ble-icon">📶</view>
+      <view class="ble-title">需要开启蓝牙与定位</view>
+      <view class="ble-desc">用于发现和连接你的小灵兔设备，仅在配网期间使用，不会上传你的位置信息。</view>
+      <view class="ble-actions">
+        <view class="pm-btn pm-btn-ghost" catchtap="onBleDeny">拒绝</view>
+        <view class="pm-btn pm-btn-primary" catchtap="onBleAgree">同意开启</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ========== 步骤3 扫描 ========== -->
+  <block wx:if="{{step === 3}}">
+
+    <!-- 绑定失败 -->
+    <block wx:if="{{showBindFail}}">
+      <view class="bind-fail-icon-wrap">
+        <text class="bind-fail-icon">!</text>
+      </view>
+      <view class="bind-fail-title">该灵兔已被其他账号绑定</view>
+      <view class="bind-fail-desc">一只小伙伴同一时间只能由一位主人陪伴。</view>
+      <view class="bind-fail-desc">如需绑定，请联系原主人在他的小程序中先解绑设备。</view>
+
+      <view class="bind-fail-card">
+        <view class="bind-fail-card-title">如果你是新主人</view>
+        <view class="bind-fail-card-body">
+          <text class="bind-fail-card-icon">💡</text>
+          <view class="bind-fail-card-text">让原主人打开小伙伴小程序 → 设备详情 → 解绑设备</view>
+        </view>
+      </view>
+
+      <view class="bind-fail-actions">
+        <view class="bind-fail-btn-ghost" bindtap="onBindFailBack">返回</view>
+        <view class="bind-fail-btn-primary" bindtap="onViewUnbindGuide">查看解绑指引</view>
+      </view>
+
+      <view class="bind-fail-error-code">
+        <text class="bind-fail-error-tag">⑩ 设备已被绑定</text>
+      </view>
+    </block>
+
+    <!-- 正常扫描 -->
+    <block wx:else>
+      <!-- 搜索卡片 -->
+      <view class="scan-card">
+        <view class="scan-card-title">搜索附近设备</view>
+        <view class="scan-card-hint">请确保已开启蓝牙</view>
+
+        <view class="radar">
+          <view class="radar-ring ring1"></view>
+          <view class="radar-ring ring2"></view>
+          <view class="radar-ring ring3"></view>
+          <view class="radar-core">
+            <image class="radar-img" src="/images/rabbit-device.png" mode="aspectFill" />
+          </view>
+        </view>
+
+        <view wx:if="{{scanning}}" class="scanning">正在扫描周边设备…</view>
+        <view wx:elif="{{scanned.length === 0}}" class="scanning">未搜索到附近设备，请靠近设备后重试</view>
+        <view wx:else class="scanning">已发现 {{scanned.length}} 台附近的小伙伴</view>
+      </view>
+
+      <!-- 设备列表 -->
+      <view wx:if="{{scanned.length > 0}}" class="scan-list-card">
+        <view class="scan-list-title">附近设备</view>
+        <view wx:for="{{scanned}}" wx:key="deviceId" class="scan-item" data-idx="{{index}}" bindtap="onPickDevice">
+          <image class="scan-avatar" src="/images/rabbit-device.png" mode="aspectFill" />
+          <view class="flex-1">
+            <view class="scan-name">{{item.name}}</view>
+            <view class="scan-sub">SN {{item.sn}} · {{item.model}}</view>
+          </view>
+          <view class="scan-rssi">
+            <view class="rssi-bar {{item.rssi >= -50 ? 'strong' : (item.rssi >= -70 ? 'medium' : 'weak')}}">
+              <view class="rssi-bar-inner" style="width:{{item.rssiPercent}} + '%'"></view>
+            </view>
+            <text class="scan-rssi-text">{{item.rssi}}dBm</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="scan-rescan-btn {{scanning ? 'disabled' : ''}}" bindtap="onRescan">
+        {{scanning ? '扫描中...' : '重新扫描'}}
+      </view>
+    </block>
+  </block>
+
+  <!-- ========== 步骤4 配置 Wi-Fi ========== -->
+  <block wx:if="{{step === 4}}">
+
+    <!-- 绿色连接提示 -->
+    <view class="wifi-conn-card">
+      <text class="wifi-conn-check">✓</text>
+      <text class="wifi-conn-text">已连接到 {{selectedDevice.name}}</text>
+    </view>
+
+    <!-- Wi-Fi 列表选择模式 -->
+    <block wx:if="{{showWifiList}}">
+      <!-- Wi-Fi 配网提示 -->
+      <view class="wifi-hint-card">
+        <text class="wifi-hint-icon">💡</text>
+        <view class="wifi-hint-content">
+          <view class="wifi-hint-text">请确保手机已连接 Wi-Fi 并开启定位服务，仅支持 <text class="wifi-hint-bold">2.4GHz</text> 频段网络。</view>
+        </view>
+      </view>
+
+      <view class="wifi-section-title">可用网络</view>
+
+      <!-- Wi-Fi 扫描中 -->
+      <view wx:if="{{wifiScanning}}" class="wifi-empty-card">
+        <view class="wifi-empty-icon">📶</view>
+        <view class="wifi-empty-text">正在扫描附近 Wi-Fi...</view>
+      </view>
+
+      <!-- Wi-Fi 列表 -->
+      <view wx:elif="{{wifiList.length > 0}}" class="wifi-list-card">
+        <view wx:for="{{wifiList}}" wx:key="ssid" class="wifi-list-item" data-idx="{{index}}" bindtap="onSelectWifi">
+          <view class="wifi-list-info">
+            <view class="wifi-list-name">
+              {{item.ssid}}
+              <text wx:if="{{item.connected}}" class="wifi-list-connected">已连接</text>
+            </view>
+            <view class="wifi-list-band {{item.is5G ? 'red' : 'green'}}">
+              {{item.is5G ? '5GHz' : '2.4GHz'}}
+            </view>
+          </view>
+          <view class="wifi-list-signal">
+            <view class="wifi-signal-bars">
+              <view class="wifi-signal-bar {{item.signalStrength >= 25 ? 'on' : ''}}"></view>
+              <view class="wifi-signal-bar {{item.signalStrength >= 50 ? 'on' : ''}}"></view>
+              <view class="wifi-signal-bar {{item.signalStrength >= 75 ? 'on' : ''}}"></view>
+              <view class="wifi-signal-bar {{item.signalStrength >= 90 ? 'on' : ''}}"></view>
+            </view>
+            <text class="wifi-signal-text">{{item.signalStrength}}%</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 未搜索到 Wi-Fi -->
+      <view wx:else class="wifi-empty-card">
+        <view class="wifi-empty-icon">📶</view>
+        <view class="wifi-empty-text">未搜索到附近 Wi-Fi</view>
+        <view class="wifi-empty-hint">请确保手机已连接 Wi-Fi 并开启定位</view>
+        <view class="wifi-empty-retry" bindtap="onSwitchWifi">重新扫描</view>
+      </view>
+    </block>
+
+    <!-- 已选 Wi-Fi 配置模式 -->
+    <block wx:else>
+      <!-- 网络信息 -->
+      <view class="wifi-section-title">网络信息</view>
+
+      <!-- 5GHz 拦截页面 -->
+      <block wx:if="{{is5G}}">
+        <!-- 5GHz Wi-Fi 名称卡片 -->
+        <view class="wifi-5g-card">
+          <view class="wifi-5g-label">Wi-Fi 名称</view>
+          <view class="wifi-5g-value">{{ssid}}</view>
+          <view class="wifi-5g-error">× 检测到 5GHz 频段，暂不支持</view>
+        </view>
+
+        <!-- Wi-Fi 密码卡片（置灰不可输入） -->
+        <view class="wifi-5g-pwd-card">
+          <view class="wifi-5g-label">Wi-Fi 密码</view>
+          <view class="wifi-5g-pwd-placeholder">请先切换到 2.4GHz 网络</view>
+        </view>
+
+        <!-- 帮助卡片 -->
+        <view class="wifi-5g-help-card">
+          <view class="wifi-5g-help-title">如何切换到 2.4GHz?</view>
+          <view class="wifi-5g-help-item">• 大部分双频路由器有独立的 2.4G/5G SSID</view>
+          <view class="wifi-5g-help-item">• 在手机 Wi-Fi 设置中选择名称带 "_2.4G" 的网络</view>
+          <view class="wifi-5g-help-item">• 或在路由器后台关闭 5GHz 后重连</view>
+        </view>
+
+        <!-- 底部按钮 -->
+        <view class="wifi-footer">
+          <view class="wifi-5g-btn" bindtap="onSwitchWifi">前往切换 Wi-Fi</view>
+        </view>
+
+        <!-- 错误码 -->
+        <view class="wifi-5g-error-code">
+          <text class="wifi-5g-error-tag">⑪ 5GHz 拦截</text>
+          <text class="wifi-5g-error-text">错误码 E-WIFI-01</text>
+        </view>
+      </block>
+
+      <!-- 正常 Wi-Fi 配置表单 -->
+      <block wx:else>
+        <!-- Wi-Fi 名称卡片 -->
+        <view class="wifi-form-card">
+          <view class="wifi-form-label">Wi-Fi 名称</view>
+          <view class="wifi-form-row">
+            <view class="wifi-form-value flex-1">{{ssid || '请选择 Wi-Fi'}}</view>
+            <text class="wifi-form-action" catchtap="onSwitchWifi">切换 ›</text>
+          </view>
+          <view wx:if="{{ssid}}" class="wifi-form-tag green">✓ 2.4GHz 频段已检测</view>
+        </view>
+
+        <!-- Wi-Fi 密码卡片 -->
+        <view class="wifi-form-card">
+          <view class="wifi-form-label">Wi-Fi 密码</view>
+          <view class="wifi-form-row">
+            <input class="wifi-form-input flex-1" value="{{password}}" password="{{!showPwd}}" bindinput="onPwdInput" placeholder="请输入 Wi-Fi 密码" />
+            <text class="wifi-form-eye" catchtap="onTogglePwd">{{showPwd ? '🙈' : '👁'}}</text>
+          </view>
+        </view>
+
+        <!-- 温馨提示 -->
+        <view class="wifi-tip-card">
+          <view class="wifi-tip-label">温馨提示</view>
+          <view class="wifi-tip-body">暂仅支持 2.4GHz 网络，5GHz 信号将无法连接。</view>
+        </view>
+
+        <!-- 底部固定按钮 -->
+        <view class="wifi-footer">
+          <view class="wifi-btn {{(!ssid || !password) ? 'disabled' : ''}}" bindtap="onStartProvision">开始配网</view>
+        </view>
+      </block>
+    </block>
+
+  </block>
+
+  <!-- ========== 步骤5 配网执行 ========== -->
+  <block wx:if="{{step === 5}}">
+
+    <!-- 配网失败 -->
+    <block wx:if="{{provisionFailed}}">
+      <view class="fail-emoji-wrap">
+        <text class="fail-emoji">😢</text>
+      </view>
+      <view class="fail-title">小伙伴没能连上网络</view>
+      <view class="fail-desc">设备联网超时，可能原因：</view>
+      <view class="fail-reason">密码错误 · 信号微弱 · 路由器繁忙</view>
+
+      <view class="fail-suggest-label">建议操作</view>
+      <view class="fail-suggest-card">
+        <view class="fail-suggest-item">
+          <view class="fail-suggest-num">1</view>
+          <view class="fail-suggest-text">检查 Wi-Fi 密码是否正确</view>
+        </view>
+        <view class="fail-suggest-item">
+          <view class="fail-suggest-num">2</view>
+          <view class="fail-suggest-text">将小伙伴靠近路由器 1 米内</view>
+        </view>
+        <view class="fail-suggest-item">
+          <view class="fail-suggest-num">3</view>
+          <view class="fail-suggest-text">重启路由器后再试</view>
+        </view>
+      </view>
+
+      <view class="fail-actions">
+        <view class="fail-btn-ghost" bindtap="onViewHelp">查看帮助</view>
+        <view class="fail-btn-primary" bindtap="onRetryProvision">重新配网</view>
+      </view>
+
+      <view class="fail-error-code">
+        <text class="fail-error-tag">⑫ 配网超时</text>
+        <text class="fail-error-text">错误码 E-WIFI-02</text>
+      </view>
+    </block>
+
+    <!-- 配网中 -->
+    <block wx:else>
+      <view class="radar" style="margin-top: 40rpx;">
+        <view class="radar-ring ring1"></view>
+        <view class="radar-ring ring2"></view>
+        <view class="radar-ring ring3"></view>
+        <view class="radar-core">🐰</view>
+      </view>
+
+      <view class="prov-title">正在为小伙伴联网...</view>
+      <view class="prov-sub">大约需要 30 秒，请保持小程序前台</view>
+
+      <view class="prov-card">
+        <view wx:for="{{provisionSteps}}" wx:key="label" class="prov-row">
+          <view class="prov-icon {{item.status}}">
+            <text wx:if="{{item.status === 'done'}}">✓</text>
+            <view wx:elif="{{item.status === 'doing'}}" class="prov-spin-sm"></view>
+            <view wx:else class="prov-dot-sm"></view>
+          </view>
+          <text class="prov-label {{item.status}}">{{item.label}}</text>
+          <text wx:if="{{item.status === 'doing'}}" class="prov-timer">{{remainingSeconds}}s</text>
+        </view>
+      </view>
+    </block>
+  </block>
+
+  <!-- ========== 步骤6 成功 ========== -->
+  <block wx:if="{{step === 6}}">
+
+    <view class="success-area">
+      <view class="success-circle">✓</view>
+      <view class="success-title">小伙伴已成功绑定</view>
+      <view class="success-sub">给它取个名字，开启你们的故事吧</view>
+    </view>
+
+    <!-- 昵称卡片 -->
+    <view class="nickname-card">
+      <view class="nickname-label">设备昵称</view>
+      <view class="nickname-row">
+        <input class="nickname-input" value="{{nickname}}" bindinput="onNicknameInput" placeholder="请输入昵称" maxlength="12" />
+        <text class="nickname-edit">编辑</text>
+      </view>
+    </view>
+
+    <!-- 信息卡片 -->
+    <view class="info-card">
+      <view class="info-row">
+        <text class="info-label gray">SN</text>
+        <text class="info-value">{{newDevice.sn}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label gray">型号</text>
+        <text class="info-value">{{newDevice.model}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label gray">激活日期</text>
+        <text class="info-value">{{newDevice.activeDate}}</text>
+      </view>
+    </view>
+
+    <!-- 底部固定按钮 -->
+    <view class="success-footer">
+      <view class="success-btn" bindtap="onFinish">开始与小伙伴互动</view>
+    </view>
+  </block>
+</view>

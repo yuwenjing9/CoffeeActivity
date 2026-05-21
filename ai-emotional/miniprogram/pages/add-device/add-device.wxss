@@ -163,55 +163,62 @@
   color: #fff;
 }
 
+/* ========== step 3：扫描 ========== */
+.scan-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.scan-card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 8rpx;
+}
+
+.scan-card-hint {
+  font-size: 24rpx;
+  color: #9C948D;
+}
+
 /* 雷达 */
 .radar {
   position: relative;
   width: 100%;
-  height: 360rpx;
+  height: 320rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 24rpx;
+  margin-top: 16rpx;
 }
 
 .radar-ring {
   position: absolute;
-  border: 4rpx solid var(--primary);
+  width: 100rpx;
+  height: 100rpx;
+  border: 2rpx solid var(--primary);
   border-radius: 50%;
   opacity: 0;
-  animation: radar 2.2s ease-out infinite;
+  animation: radar 2.5s ease-out infinite;
 }
 
 .ring1 {
-  width: 100rpx;
-  height: 100rpx;
   animation-delay: 0s;
 }
 
 .ring2 {
-  width: 100rpx;
-  height: 100rpx;
-  animation-delay: 0.7s;
+  animation-delay: 0.8s;
 }
 
 .ring3 {
-  width: 100rpx;
-  height: 100rpx;
-  animation-delay: 1.4s;
+  animation-delay: 1.6s;
 }
 
 @keyframes radar {
-  0% {
-    width: 100rpx;
-    height: 100rpx;
-    opacity: 0.6;
-  }
-
-  100% {
-    width: 360rpx;
-    height: 360rpx;
-    opacity: 0;
-  }
+  0%   { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(3); opacity: 0; }
 }
 
 .radar-core {
@@ -222,8 +229,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 60rpx;
   z-index: 2;
+  overflow: hidden;
+}
+
+.radar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
 }
 
 .scanning {
@@ -231,6 +244,22 @@
   color: #9C948D;
   font-size: 26rpx;
   margin-top: 16rpx;
+}
+
+/* 设备列表卡片 */
+.scan-list-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin-top: 24rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.scan-list-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 16rpx;
 }
 
 /* 扫描结果 item */
@@ -249,11 +278,8 @@
   width: 72rpx;
   height: 72rpx;
   border-radius: 50%;
-  background: linear-gradient(135deg, #FFD7BE 0%, var(--primary) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 38rpx;
+  background: #FFE7D9;
+  overflow: hidden;
   margin-right: 20rpx;
   flex-shrink: 0;
 }
@@ -271,8 +297,50 @@
 }
 
 .scan-rssi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.rssi-bar {
+  width: 60rpx;
+  height: 6rpx;
+  background: #E8E2D8;
+  border-radius: 3rpx;
+  margin-bottom: 6rpx;
+  overflow: hidden;
+}
+
+.rssi-bar-inner {
+  height: 100%;
+  border-radius: 3rpx;
+}
+
+.rssi-bar.strong .rssi-bar-inner { background: #34C759; }
+.rssi-bar.medium .rssi-bar-inner { background: #FF7A3D; }
+.rssi-bar.weak .rssi-bar-inner { background: #E94B3C; }
+
+.scan-rssi-text {
   font-size: 22rpx;
   color: #5A5450;
+}
+
+.scan-rescan-btn {
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #1F1B16;
+  margin-top: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.scan-rescan-btn.disabled {
+  color: #9C948D;
 }
 
 /* 表单 */
@@ -648,6 +716,38 @@
   font-weight: 500;
 }
 
+/* Wi-Fi 配网提示卡片 */
+.wifi-hint-card {
+  display: flex;
+  align-items: flex-start;
+  background: #FFF8F0;
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  margin: 24rpx 32rpx 24rpx;
+}
+
+.wifi-hint-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.wifi-hint-content {
+  flex: 1;
+}
+
+.wifi-hint-text {
+  font-size: 26rpx;
+  color: #5A5450;
+  line-height: 1.6;
+}
+
+.wifi-hint-bold {
+  color: #1F1B16;
+  font-weight: 600;
+}
+
 .wifi-section-title {
   font-size: 24rpx;
   color: #9C948D;
@@ -666,6 +766,137 @@
   font-size: 24rpx;
   color: #9C948D;
   margin-bottom: 12rpx;
+}
+
+/* Wi-Fi 列表 */
+.wifi-list-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin: 0 32rpx 20rpx;
+  padding: 8rpx 0;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.wifi-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx;
+  border-bottom: 1rpx solid #F4F1EC;
+}
+
+.wifi-list-item:last-child {
+  border-bottom: none;
+}
+
+.wifi-list-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.wifi-list-name {
+  font-size: 30rpx;
+  color: #1F1B16;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.wifi-list-band {
+  font-size: 22rpx;
+  display: inline-block;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+}
+
+.wifi-list-band.green {
+  background: #E8F5E9;
+  color: #34C759;
+}
+
+.wifi-list-band.red {
+  background: #FFF0EE;
+  color: #E94B3C;
+}
+
+.wifi-list-signal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.wifi-signal-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3rpx;
+  height: 20rpx;
+  margin-bottom: 4rpx;
+}
+
+.wifi-signal-bar {
+  width: 5rpx;
+  background: #E8E2D8;
+  border-radius: 1rpx;
+}
+
+.wifi-signal-bar:nth-child(1) { height: 6rpx; }
+.wifi-signal-bar:nth-child(2) { height: 10rpx; }
+.wifi-signal-bar:nth-child(3) { height: 14rpx; }
+.wifi-signal-bar:nth-child(4) { height: 18rpx; }
+
+.wifi-signal-bar.on {
+  background: var(--primary);
+}
+
+.wifi-signal-text {
+  font-size: 20rpx;
+  color: #9C948D;
+}
+
+.wifi-list-connected {
+  font-size: 22rpx;
+  color: #34C759;
+  margin-left: 12rpx;
+  font-weight: 400;
+}
+
+/* Wi-Fi 空状态 */
+.wifi-empty-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin: 0 32rpx 20rpx;
+  padding: 60rpx 28rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.wifi-empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 16rpx;
+}
+
+.wifi-empty-text {
+  font-size: 28rpx;
+  color: #1F1B16;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.wifi-empty-hint {
+  font-size: 24rpx;
+  color: #9C948D;
+  margin-bottom: 24rpx;
+}
+
+.wifi-empty-retry {
+  font-size: 26rpx;
+  color: var(--primary);
+  padding: 12rpx 32rpx;
+  border: 2rpx solid var(--primary);
+  border-radius: 24rpx;
 }
 
 .wifi-form-row {
@@ -764,4 +995,342 @@
 
 .wifi-btn.disabled {
   background: #FFC9AC;
+}
+
+/* ========== 5GHz 拦截 ========== */
+.wifi-5g-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 28rpx 32rpx;
+  margin: 0 32rpx 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  border: 2rpx solid #FFE0DB;
+}
+
+.wifi-5g-label {
+  font-size: 24rpx;
+  color: #E94B3C;
+  margin-bottom: 12rpx;
+}
+
+.wifi-5g-value {
+  font-size: 32rpx;
+  color: #1F1B16;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.wifi-5g-error {
+  font-size: 24rpx;
+  color: #E94B3C;
+}
+
+.wifi-5g-pwd-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 28rpx 32rpx;
+  margin: 0 32rpx 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.wifi-5g-pwd-placeholder {
+  font-size: 28rpx;
+  color: #C4BEB8;
+}
+
+.wifi-5g-help-card {
+  background: #FFF8F0;
+  border-radius: 24rpx;
+  padding: 28rpx 32rpx;
+  margin: 0 32rpx 20rpx;
+}
+
+.wifi-5g-help-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 16rpx;
+}
+
+.wifi-5g-help-item {
+  font-size: 26rpx;
+  color: #5A5450;
+  line-height: 1.8;
+}
+
+.wifi-5g-btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1F1B16;
+  background: #FFFFFF;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.wifi-5g-error-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 16rpx;
+  padding-bottom: 32rpx;
+}
+
+.wifi-5g-error-tag {
+  font-size: 24rpx;
+  color: #9C948D;
+}
+
+.wifi-5g-error-text {
+  font-size: 22rpx;
+  color: #B5ADA6;
+}
+
+/* ========== 配网失败 ========== */
+.fail-emoji-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFE7D9 0%, #FFD4C2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 80rpx auto 32rpx;
+}
+
+.fail-emoji {
+  font-size: 80rpx;
+}
+
+.fail-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  text-align: center;
+  margin-bottom: 12rpx;
+}
+
+.fail-desc {
+  font-size: 26rpx;
+  color: #9C948D;
+  text-align: center;
+}
+
+.fail-reason {
+  font-size: 26rpx;
+  color: #9C948D;
+  text-align: center;
+  margin-bottom: 48rpx;
+}
+
+.fail-suggest-label {
+  font-size: 24rpx;
+  color: #9C948D;
+  margin: 0 32rpx 16rpx;
+}
+
+.fail-suggest-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin: 0 32rpx 48rpx;
+  padding: 8rpx 0;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.fail-suggest-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid #F4F1EC;
+}
+
+.fail-suggest-item:last-child {
+  border-bottom: none;
+}
+
+.fail-suggest-num {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: #FFF0E5;
+  color: var(--primary);
+  font-size: 24rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.fail-suggest-text {
+  font-size: 30rpx;
+  color: #1F1B16;
+}
+
+.fail-actions {
+  display: flex;
+  gap: 20rpx;
+  margin: 0 32rpx 32rpx;
+}
+
+.fail-btn-ghost {
+  flex: 1;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1F1B16;
+  /* background: #FFFFFF; */
+  /* box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04); */
+  border: 2rpx solid #e8e2d8;
+}
+
+.fail-btn-primary {
+  flex: 1;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #FFFFFF;
+  background: var(--primary);
+}
+
+.fail-error-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 16rpx;
+  padding-bottom: 32rpx;
+}
+
+.fail-error-tag {
+  font-size: 24rpx;
+  color: #9C948D;
+}
+
+.fail-error-text {
+  font-size: 22rpx;
+  color: #B5ADA6;
+}
+
+/* ========== 绑定失败 ========== */
+.bind-fail-icon-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: #FFF0EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 80rpx auto 32rpx;
+}
+
+.bind-fail-icon {
+  font-size: 80rpx;
+  color: #E94B3C;
+  font-weight: 700;
+}
+
+.bind-fail-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+
+.bind-fail-desc {
+  font-size: 26rpx;
+  color: #9C948D;
+  text-align: center;
+  line-height: 1.6;
+  padding: 0 48rpx;
+}
+
+.bind-fail-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin: 40rpx 32rpx 48rpx;
+  padding: 28rpx 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.bind-fail-card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1F1B16;
+  margin-bottom: 16rpx;
+}
+
+.bind-fail-card-body {
+  display: flex;
+  align-items: flex-start;
+}
+
+.bind-fail-card-icon {
+  font-size: 40rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.bind-fail-card-text {
+  font-size: 26rpx;
+  color: #5A5450;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.bind-fail-actions {
+  display: flex;
+  gap: 20rpx;
+  margin: 0 32rpx 32rpx;
+}
+
+.bind-fail-btn-ghost {
+  flex: 1;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1F1B16;
+  background: #FFFFFF;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.bind-fail-btn-primary {
+  flex: 1;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #FFFFFF;
+  background: var(--primary);
+}
+
+.bind-fail-error-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 16rpx;
+  padding-bottom: 32rpx;
+}
+
+.bind-fail-error-tag {
+  font-size: 24rpx;
+  color: #9C948D;
 }

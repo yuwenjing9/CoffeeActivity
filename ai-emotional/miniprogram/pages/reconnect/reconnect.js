@@ -36,9 +36,11 @@ Page({
     if (this._timer) clearTimeout(this._timer);
   },
 
-  // 开始重新配网 → 进入配置 Wi-Fi
+  // 开始重新配网 → 跳转到 add-device 配网步骤
   onStartReconnect() {
-    this.setData({ step: 2, is5G: util.is5GWifi(this.data.ssid) });
+    wx.redirectTo({
+      url: `/pages/add-device/add-device?from=reconnect&id=${this._id}`
+    });
   },
 
   onSsidInput(e) {
