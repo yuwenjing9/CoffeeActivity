@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/add-device/add-device",
-          "pathName": "pages/add-device/add-device",
+          "name": "pages/profile/profile",
+          "pathName": "pages/profile/profile",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "pages/add-device/add-device",
+          "pathName": "pages/add-device/add-device",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

@@ -31,15 +31,15 @@
     <view class="card">
       <view class="row">
         <text class="row-k">公司主体</text>
-        <text class="row-sub">XX 科技有限公司</text>
+        <text class="row-sub">腾讯科技（深圳）有限公司</text>
       </view>
       <view class="row">
         <text class="row-k">ICP 备案</text>
-        <text class="row-sub">京ICP备XXXXXXXX号</text>
+        <text class="row-sub">粤 ICP 备 2026XXXXXX 号</text>
       </view>
       <view class="row no-bd">
         <text class="row-k">公安备案</text>
-        <text class="row-sub">京公网安备 XXXXXXXXXXXXX</text>
+        <text class="row-sub">粤公网安备 4403XXXXXX 号</text>
       </view>
     </view>
   </view>
@@ -53,11 +53,11 @@
       </view>
       <view class="row">
         <text class="row-k">邮箱</text>
-        <text class="row-sub">support@example.com</text>
+        <text class="row-sub">support@lingbao.ai</text>
       </view>
       <view class="row no-bd">
         <text class="row-k">地址</text>
-        <text class="row-sub">北京市海淀区</text>
+        <text class="row-sub">深圳市南山区</text>
       </view>
     </view>
   </view>
