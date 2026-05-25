@@ -1,7 +1,8 @@
 const KEYS = {
   USER: 'ec_user_info',
   PROTOCOL: 'ec_protocol_agreed',
-  DEVICES: 'ec_devices'
+  DEVICES: 'ec_devices',
+  AUTH_REVOKED: 'ec_auth_revoked'
 };
 
 const MOCK_DEVICES = [{
@@ -105,5 +106,12 @@ module.exports = {
     const list = this.getDevices() || [];
     const next = list.filter(d => d.id !== id);
     this.setDevices(next);
+  },
+
+  getAuthRevoked() {
+    return !!wx.getStorageSync(KEYS.AUTH_REVOKED);
+  },
+  setAuthRevoked(v) {
+    wx.setStorageSync(KEYS.AUTH_REVOKED, v ? 1 : 0);
   }
 };

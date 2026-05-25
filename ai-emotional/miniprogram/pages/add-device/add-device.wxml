@@ -6,7 +6,7 @@
   <block wx:if="{{step === 1}}">
     <!-- 兔子插画 -->
     <view class="prep-illust">
-      <image class="prep-rabbit" src="/images/rabbit-device.png" mode="aspectFit" />
+      <image class="prep-rabbit" src="https://cdn.nj.qq.com/aiEmotionTest/rabbit-device.png" mode="aspectFit" />
     </view>
 
     <!-- 标题和描述 -->
@@ -32,8 +32,8 @@
   <view wx:if="{{showBleModal}}" class="mask">
     <view class="ble-modal" catchtap="">
       <view class="ble-icon">📶</view>
-      <view class="ble-title">需要开启蓝牙与定位</view>
-      <view class="ble-desc">用于发现和连接你的小灵兔设备，仅在配网期间使用，不会上传你的位置信息。</view>
+      <view class="ble-title">{{isIOS ? '需要开启蓝牙' : '需要开启蓝牙与定位'}}</view>
+      <view class="ble-desc">{{isIOS ? '用于发现和连接你的小灵兔设备，仅在配网期间使用。' : '用于发现和连接你的小灵兔设备，仅在配网期间使用，不会上传你的位置信息。'}}</view>
       <view class="ble-actions">
         <view class="pm-btn pm-btn-ghost" catchtap="onBleDeny">拒绝</view>
         <view class="pm-btn pm-btn-primary" catchtap="onBleAgree">同意开启</view>
@@ -83,7 +83,7 @@
           <view class="radar-ring ring2"></view>
           <view class="radar-ring ring3"></view>
           <view class="radar-core">
-            <image class="radar-img" src="/images/rabbit-device.png" mode="aspectFill" />
+            <image class="radar-img" src="https://cdn.nj.qq.com/aiEmotionTest/rabbit-device.png" mode="aspectFill" />
           </view>
         </view>
 
@@ -96,7 +96,7 @@
       <view wx:if="{{scanned.length > 0}}" class="scan-list-card">
         <view class="scan-list-title">附近设备</view>
         <view wx:for="{{scanned}}" wx:key="deviceId" class="scan-item" data-idx="{{index}}" bindtap="onPickDevice">
-          <image class="scan-avatar" src="/images/rabbit-device.png" mode="aspectFill" />
+          <image class="scan-avatar" src="https://cdn.nj.qq.com/aiEmotionTest/rabbit-device.png" mode="aspectFill" />
           <view class="flex-1">
             <view class="scan-name">{{item.name}}</view>
             <view class="scan-sub">SN {{item.sn}} · {{item.model}}</view>

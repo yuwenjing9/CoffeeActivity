@@ -1,6 +1,6 @@
 <view class="dc" bindtap="onTap">
   <view class="dc-avatar {{device.status === 'offline' ? 'off' : ''}}">
-    <image class="dc-avatar-img" src="/images/rabbit-device.png" mode="aspectFill" />
+    <image class="dc-avatar-img" src="https://cdn.nj.qq.com/aiEmotionTest/rabbit-device.png" mode="aspectFill" />
   </view>
 
   <view class="dc-info">

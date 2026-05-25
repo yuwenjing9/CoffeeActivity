@@ -22,7 +22,5 @@
       <view class="wv-h">四、联系我们</view>
       <view class="wv-p">如对本{{title}}有任何疑问，可通过客服 400-123-4567 联系。</view>
     </view>
-
-    <view class="wv-foot">本页面为示例内容，正式版请替换为实际文案。</view>
   </view>
 </view>

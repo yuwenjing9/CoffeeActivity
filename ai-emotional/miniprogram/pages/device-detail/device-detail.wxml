@@ -2,7 +2,7 @@
 
   <!-- 顶部信息卡片 -->
   <view class="dd-hero-card">
-    <image class="dd-hero-avatar" src="/images/rabbit-device.png" mode="aspectFill" />
+    <image class="dd-hero-avatar" src="https://cdn.nj.qq.com/aiEmotionTest/rabbit-device.png" mode="aspectFill" />
     <view class="dd-hero-name">{{device.nickname}}</view>
     <view class="dd-hero-status">
       <view class="dd-hero-dot {{device.status === 'online' ? 'on' : 'off'}}"></view>

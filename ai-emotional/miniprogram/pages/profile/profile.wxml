@@ -70,7 +70,7 @@
     <view class="card">
       <view class="row" bindtap="onCall">
         <text class="row-k">联系客服</text>
-        <text class="row-sub">400-123-4567 ›</text>
+        <text class="row-sub">400-123-4567 <text class="row-arrow">›</text></text>
       </view>
       <view class="row" data-url="/pages/webview/webview?type=help" bindtap="goPage">
         <text class="row-k">帮助中心</text>

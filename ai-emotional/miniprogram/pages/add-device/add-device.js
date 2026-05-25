@@ -34,6 +34,7 @@ Page({
 
     // step1 - 准备
     showBleModal: false,
+    isIOS: false,
 
     // step3 - 扫描 / 绑定失败
     showBindFail: false,
@@ -65,6 +66,7 @@ Page({
   },
 
   onLoad(opt) {
+    this.setData({ isIOS: this._isIOS() });
     this._fromReconnect = false;
     this._reconnectDeviceId = '';
     if (opt && opt.from === 'reconnect' && opt.id) {
@@ -126,18 +128,83 @@ Page({
 
   // ========== 步骤 1：准备 ==========
   onReadyNext() {
-    this.setData({ showBleModal: true });
+    this._tryBluetooth();
+  },
+
+  _isIOS() {
+    const sysInfo = wx.getSystemInfoSync();
+    return (sysInfo.platform || '').toLowerCase() === 'ios' || (sysInfo.system || '').toLowerCase().includes('ios');
+  },
+
+  _tryBluetooth() {
+    wx.openBluetoothAdapter({
+      success: () => {
+        // 蓝牙已授权，iOS 不需要定位，Android 继续检查定位
+        if (this._isIOS()) {
+          this._enterScan();
+        } else {
+          this._ensureLocation(() => {
+            this._enterScan();
+          });
+        }
+      },
+      fail: (err) => {
+        if (err.errCode === 10004 || err.errno === 103) {
+          // 蓝牙未授权，弹出权限说明弹窗
+          this.setData({ showBleModal: true });
+        } else if (err.errCode === 10001) {
+          wx.showModal({
+            title: '提示',
+            content: '请先开启手机蓝牙',
+            showCancel: false
+          });
+        } else {
+          util.toast('蓝牙初始化失败，请检查权限');
+        }
+      }
+    });
+  },
+
+  _ensureLocation(callback) {
+    wx.authorize({
+      scope: 'scope.userLocation',
+      success: () => callback && callback(),
+      fail: () => {
+        this._guideToSetting('定位');
+      }
+    });
   },
 
   // ========== 步骤 2：蓝牙权限 ==========
   onBleAgree() {
-    wx.authorize({
-      scope: 'scope.location',
+    storage.setAuthRevoked(false);
+    wx.openBluetoothAdapter({
       success: () => {
-        this._openBluetooth();
+        // iOS 不需要定位授权，直接进入扫描
+        if (this._isIOS()) {
+          this.setData({ showBleModal: false });
+          this._enterScan();
+        } else {
+          this._ensureLocation(() => {
+            this.setData({ showBleModal: false });
+            this._enterScan();
+          });
+        }
       },
-      fail: () => {
-        this._openBluetooth();
+      fail: (err) => {
+        if (err.errCode === 10004 || err.errno === 103) {
+          this._guideToSetting('蓝牙');
+        } else if (err.errCode === 10001) {
+          this.setData({ showBleModal: false });
+          wx.showModal({
+            title: '提示',
+            content: '请先开启手机蓝牙',
+            showCancel: false
+          });
+        } else {
+          this.setData({ showBleModal: false });
+          util.toast('蓝牙初始化失败，请检查权限');
+        }
       }
     });
   },
@@ -145,12 +212,34 @@ Page({
     this.setData({ showBleModal: false });
     util.toast('未授权蓝牙，无法继续配网');
   },
+
+  _guideToSetting(permName) {
+    this.setData({ showBleModal: false });
+    wx.showModal({
+      title: '授权提示',
+      content: `需要开启${permName}权限才能扫描和连接设备，请在设置中开启`,
+      confirmText: '去设置',
+      success: (res) => {
+        if (res.confirm) {
+          wx.openSetting({
+            success: () => {
+              this._tryBluetooth();
+            }
+          });
+        } else {
+          util.toast('未授权蓝牙，无法继续配网');
+        }
+      }
+    });
+  },
+
   _openBluetooth() {
     wx.openBluetoothAdapter({
       success: () => {
         this._enterScan();
       },
       fail: (err) => {
+        console.log('err', err);
         if (err.errCode === 10001) {
           wx.showModal({
             title: '提示',

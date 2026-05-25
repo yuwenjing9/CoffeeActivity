@@ -31,10 +31,3 @@
   color: #5A5450;
   line-height: 1.8;
 }
-
-.wv-foot {
-  font-size: 22rpx;
-  color: #9C948D;
-  text-align: center;
-  margin-top: 36rpx;
-}
