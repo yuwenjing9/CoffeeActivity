@@ -94,6 +94,7 @@
     </view>
   </block>
 
+
   <!-- ===== 第4屏：完成 ===== -->
   <block wx:if="{{step === 4}}">
     <view class="card mt-16" style="text-align:center; padding-top:48rpx;">

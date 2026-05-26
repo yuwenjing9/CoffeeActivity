@@ -1,5 +1,6 @@
 const storage = require('../../utils/storage.js');
 const util = require('../../utils/util.js');
+const bleManager = require('../../utils/ble-manager.js');
 
 Page({
   data: {
@@ -7,7 +8,8 @@ Page({
     editingName: false,
     nameDraft: '',
     showUnbindSheet: false,
-    unbindChecked: false
+    unbindChecked: false,
+    refreshing: false
   },
 
   onLoad(opt) {
@@ -15,6 +17,7 @@ Page({
   },
   onShow() {
     this._reload();
+    this._refreshBLEStatus();
   },
 
   _reload() {
@@ -25,6 +28,22 @@ Page({
       return;
     }
     this.setData({ device, nameDraft: device.nickname });
+  },
+
+  _refreshBLEStatus() {
+    const device = this.data.device;
+    if (!device || !device.bleDeviceId || this.data.refreshing) return;
+
+    this.setData({ refreshing: true });
+    bleManager.refreshDevice(this._id).then((updated) => {
+      if (updated) {
+        this.setData({ device: updated, nameDraft: updated.nickname, refreshing: false });
+      } else {
+        this.setData({ refreshing: false });
+      }
+    }).catch(() => {
+      this.setData({ refreshing: false });
+    });
   },
 
   // 复制 SN

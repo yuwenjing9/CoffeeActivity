@@ -9,6 +9,9 @@
     </view>
   </view>
 
+  <!-- 刷新提示 -->
+  <view wx:if="{{checking}}" class="dev-refresh-tip">正在检测设备状态...</view>
+
   <!-- 列表 -->
   <view wx:if="{{devices.length > 0}}" class="dev-list">
     <view class="dev-list-item" wx:for="{{devices}}" wx:key="id">

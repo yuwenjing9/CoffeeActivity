@@ -14,7 +14,7 @@
     <view class="dc-meta">
       <text>SN · {{device.sn ? device.sn : ''}}</text>
       <text class="dc-sep">|</text>
-      <text>{{device.status === 'online' ? ('电量 ' + device.battery + '%') : '已离线2小时'}}</text>
+      <text>{{device.status === 'online' ? ('电量 ' + device.battery + '%') : device.offlineText}}</text>
     </view>
   </view>
 

@@ -22,11 +22,6 @@ App({
 
     // 用户信息
     this.globalData.userInfo = storage.getUserInfo();
-
-    // mock：首次启动初始化设备列表
-    if (storage.getDevices() === null) {
-      storage.initMockDevices();
-    }
   },
 
   isLogin() {

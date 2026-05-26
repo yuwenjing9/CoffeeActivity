@@ -6,7 +6,9 @@
     <view class="dd-hero-name">{{device.nickname}}</view>
     <view class="dd-hero-status">
       <view class="dd-hero-dot {{device.status === 'online' ? 'on' : 'off'}}"></view>
-      <text>{{device.status === 'online' ? '在线 · 已连接' : '离线'}}</text>
+      <text wx:if="{{refreshing}}">检测中...</text>
+      <text wx:elif="{{device.status === 'online'}}">在线 · 已连接</text>
+      <text wx:else>离线</text>
     </view>
   </view>
 

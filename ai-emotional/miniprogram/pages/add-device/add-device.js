@@ -12,7 +12,7 @@ const PROVISION_STEPS = [
 // ========== 配网模式开关 ==========
 // true = 模拟模式（无真实设备时调试用，定时器模拟配网过程）
 // false = 正式模式（走真实 BLE 配网，动态发现服务和特征值）
-const PROVISION_MOCK = true;
+const PROVISION_MOCK = false;
 
 // BLE 单包最大字节数（默认 MTU 20，协商后最大 512）
 const BLE_MTU = 20;
@@ -128,7 +128,7 @@ Page({
 
   // ========== 步骤 1：准备 ==========
   onReadyNext() {
-    this._tryBluetooth();
+    this._openBluetoothAndLocation();
   },
 
   _isIOS() {
@@ -136,29 +136,39 @@ Page({
     return (sysInfo.platform || '').toLowerCase() === 'ios' || (sysInfo.system || '').toLowerCase().includes('ios');
   },
 
-  _tryBluetooth() {
+  /**
+   * 统一蓝牙+定位授权入口
+   * @param {Function} onSuccess - 蓝牙和定位都就绪后的回调（不传则默认进入扫描）
+   * @param {Function} onAuthDeny - 授权被拒时的回调（不传则弹引导设置弹窗）
+   */
+  _openBluetoothAndLocation(onSuccess, onAuthDeny) {
+    const successCb = onSuccess || (() => this._enterScan());
     wx.openBluetoothAdapter({
       success: () => {
-        // 蓝牙已授权，iOS 不需要定位，Android 继续检查定位
+        this.setData({ showBleModal: false });
         if (this._isIOS()) {
-          this._enterScan();
+          successCb();
         } else {
-          this._ensureLocation(() => {
-            this._enterScan();
-          });
+          this._ensureLocation(successCb);
         }
       },
       fail: (err) => {
         if (err.errCode === 10004 || err.errno === 103) {
-          // 蓝牙未授权，弹出权限说明弹窗
-          this.setData({ showBleModal: true });
+          // 蓝牙未授权
+          if (onAuthDeny) {
+            onAuthDeny();
+          } else {
+            this.setData({ showBleModal: true });
+          }
         } else if (err.errCode === 10001) {
+          this.setData({ showBleModal: false });
           wx.showModal({
             title: '提示',
             content: '请先开启手机蓝牙',
             showCancel: false
           });
         } else {
+          this.setData({ showBleModal: false });
           util.toast('蓝牙初始化失败，请检查权限');
         }
       }
@@ -178,34 +188,9 @@ Page({
   // ========== 步骤 2：蓝牙权限 ==========
   onBleAgree() {
     storage.setAuthRevoked(false);
-    wx.openBluetoothAdapter({
-      success: () => {
-        // iOS 不需要定位授权，直接进入扫描
-        if (this._isIOS()) {
-          this.setData({ showBleModal: false });
-          this._enterScan();
-        } else {
-          this._ensureLocation(() => {
-            this.setData({ showBleModal: false });
-            this._enterScan();
-          });
-        }
-      },
-      fail: (err) => {
-        if (err.errCode === 10004 || err.errno === 103) {
-          this._guideToSetting('蓝牙');
-        } else if (err.errCode === 10001) {
-          this.setData({ showBleModal: false });
-          wx.showModal({
-            title: '提示',
-            content: '请先开启手机蓝牙',
-            showCancel: false
-          });
-        } else {
-          this.setData({ showBleModal: false });
-          util.toast('蓝牙初始化失败，请检查权限');
-        }
-      }
+    // 用户已同意，再次尝试蓝牙，若仍被拒则引导去设置页
+    this._openBluetoothAndLocation(null, () => {
+      this._guideToSetting('蓝牙');
     });
   },
   onBleDeny() {
@@ -223,31 +208,11 @@ Page({
         if (res.confirm) {
           wx.openSetting({
             success: () => {
-              this._tryBluetooth();
+              this._openBluetoothAndLocation();
             }
           });
         } else {
           util.toast('未授权蓝牙，无法继续配网');
-        }
-      }
-    });
-  },
-
-  _openBluetooth() {
-    wx.openBluetoothAdapter({
-      success: () => {
-        this._enterScan();
-      },
-      fail: (err) => {
-        console.log('err', err);
-        if (err.errCode === 10001) {
-          wx.showModal({
-            title: '提示',
-            content: '请先开启手机蓝牙',
-            showCancel: false
-          });
-        } else {
-          util.toast('蓝牙初始化失败，请检查权限');
         }
       }
     });
@@ -417,6 +382,7 @@ Page({
   onPickDevice(e) {
     const idx = e.currentTarget.dataset.idx;
     const dev = this.data.scanned[idx];
+    console.log('selectedDevice111', dev);
     if (!dev) return;
 
     this._stopBleScan();
@@ -500,80 +466,10 @@ Page({
         wx.getConnectedWifi({
           success: (connectedRes) => {
             const connectedWifi = connectedRes.wifi;
-            // 获取 Wi-Fi 列表
-            wx.getWifiList({
-              success: () => {
-                // 监听 Wi-Fi 列表
-                wx.onGetWifiList((res) => {
-                  console.log('res.wifiList',res.wifiList);
-                  const rawList = res.wifiList || [];
-                  const wifiList = rawList
-                    .filter(w => w.SSID && w.SSID.length > 0)
-                    .sort((a, b) => (b.signalStrength || 0) - (a.signalStrength || 0))
-                    .map(w => ({
-                      ssid: w.SSID,
-                      bssid: w.BSSID || '',
-                      signalStrength: w.signalStrength || 0,
-                      secure: w.secure,
-                      is5G: util.is5GWifi(w.SSID)
-                    }));
-                  // 将已连接的 Wi-Fi 排到最前面
-                  if (connectedWifi && connectedWifi.SSID) {
-                    const idx = wifiList.findIndex(w => w.ssid === connectedWifi.SSID);
-                    if (idx > 0) {
-                      const item = wifiList.splice(idx, 1)[0];
-                      item.connected = true;
-                      wifiList.unshift(item);
-                    } else if (idx === 0) {
-                      wifiList[0].connected = true;
-                    }
-                  }
-                  this.setData({ wifiList, wifiScanning: false });
-                });
-              },
-              fail: (err) => {
-                console.warn('获取 Wi-Fi 列表失败', err);
-                this.setData({ wifiScanning: false });
-                // iOS 不支持 getWifiList，使用 getConnectedWifi 兜底
-                if (connectedWifi && connectedWifi.SSID) {
-                  this.setData({
-                    wifiList: [{
-                      ssid: connectedWifi.SSID,
-                      bssid: connectedWifi.BSSID || '',
-                      signalStrength: 90,
-                      secure: true,
-                      is5G: util.is5GWifi(connectedWifi.SSID),
-                      connected: true
-                    }],
-                    wifiScanning: false
-                  });
-                }
-              }
-            });
+            this._listenWifiList(connectedWifi);
           },
           fail: () => {
-            // 获取当前 Wi-Fi 失败，仍尝试获取列表
-            wx.getWifiList({
-              success: () => {
-                wx.onGetWifiList((res) => {
-                  const rawList = res.wifiList || [];
-                  const wifiList = rawList
-                    .filter(w => w.SSID && w.SSID.length > 0)
-                    .sort((a, b) => (b.signalStrength || 0) - (a.signalStrength || 0))
-                    .map(w => ({
-                      ssid: w.SSID,
-                      bssid: w.BSSID || '',
-                      signalStrength: w.signalStrength || 0,
-                      secure: w.secure,
-                      is5G: util.is5GWifi(w.SSID)
-                    }));
-                  this.setData({ wifiList, wifiScanning: false });
-                });
-              },
-              fail: () => {
-                this.setData({ wifiScanning: false });
-              }
-            });
+            this._listenWifiList(null);
           }
         });
       },
@@ -581,6 +477,71 @@ Page({
         console.warn('Wi-Fi 模块初始化失败', err);
         this.setData({ wifiScanning: false });
         util.toast('Wi-Fi 初始化失败');
+      }
+    });
+  },
+
+  // 注册 Wi-Fi 列表监听（先移除旧监听，避免重复）
+  _listenWifiList(connectedWifi) {
+    // 先移除旧的监听，防止重复注册
+    wx.offGetWifiList();
+
+    wx.onGetWifiList((res) => {
+      console.log('[WiFi] onGetWifiList 回调, 数量:', (res.wifiList || []).length);
+      const rawList = res.wifiList || [];
+      // 按 BSSID+SSID 去重
+      const seen = new Set();
+      const wifiList = rawList
+        .filter(w => w.SSID && w.SSID.length > 0)
+        .filter(w => {
+          const key = w.SSID + '_' + (w.BSSID || '');
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .sort((a, b) => (b.signalStrength || 0) - (a.signalStrength || 0))
+        .map(w => ({
+          ssid: w.SSID,
+          bssid: w.BSSID || '',
+          signalStrength: w.signalStrength || 0,
+          secure: w.secure,
+          is5G: util.is5GWifi(w.SSID)
+        }));
+
+      // 将已连接的 Wi-Fi 排到最前面
+      if (connectedWifi && connectedWifi.SSID) {
+        const idx = wifiList.findIndex(w => w.ssid === connectedWifi.SSID);
+        if (idx > 0) {
+          const item = wifiList.splice(idx, 1)[0];
+          item.connected = true;
+          wifiList.unshift(item);
+        } else if (idx === 0) {
+          wifiList[0].connected = true;
+        }
+      }
+
+      this.setData({ wifiList, wifiScanning: false });
+    });
+
+    // 获取 Wi-Fi 列表
+    wx.getWifiList({
+      fail: (err) => {
+        console.warn('获取 Wi-Fi 列表失败', err);
+        this.setData({ wifiScanning: false });
+        // iOS 不支持 getWifiList，使用 getConnectedWifi 兜底
+        if (connectedWifi && connectedWifi.SSID) {
+          this.setData({
+            wifiList: [{
+              ssid: connectedWifi.SSID,
+              bssid: connectedWifi.BSSID || '',
+              signalStrength: 90,
+              secure: true,
+              is5G: util.is5GWifi(connectedWifi.SSID),
+              connected: true
+            }],
+            wifiScanning: false
+          });
+        }
       }
     });
   },
@@ -656,6 +617,7 @@ Page({
         clearInterval(this._countdownTimer);
         this._countdownTimer = null;
         if (this.data.provisionIndex < PROVISION_STEPS.length) {
+          console.log('超时', this.data.provisionIndex < PROVISION_STEPS.length);
           this._onProvisionFail();
         }
       }
@@ -697,7 +659,9 @@ Page({
   // 真实 BLE 配网
   _runProvisionReal() {
     const deviceId = this.data.selectedDevice?.deviceId;
+    console.log('[配网] _runProvisionReal 开始, deviceId:', deviceId);
     if (!deviceId) {
+      console.error('[配网] deviceId 为空，配网失败');
       this._onProvisionFail();
       return;
     }
@@ -722,13 +686,15 @@ Page({
   },
 
   _bleStartProvision(deviceId) {
+    console.log('[配网] _bleStartProvision 开始, deviceId:', deviceId);
     // 发现 Wi-Fi 配网服务和特征值
     this._bleDiscoverWifiService(deviceId, (err, serviceInfo) => {
       if (err) {
-        console.error('发现 BLE 服务失败', err);
+        console.error('[配网] 发现 BLE 服务失败', err);
         this._onProvisionFail();
         return;
       }
+      console.log('[配网] 发现服务成功:', serviceInfo);
       const { serviceId, writeChar, notifyChar } = serviceInfo;
       this._wifiServiceId = serviceId;
       this._wifiWriteChar = writeChar;
@@ -737,33 +703,35 @@ Page({
       // 开启 notify 监听设备返回
       this._bleEnableNotify(deviceId, serviceId, notifyChar, (err2) => {
         if (err2) {
-          console.error('开启 BLE notify 失败', err2);
+          console.error('[配网] 开启 BLE notify 失败', err2);
           this._onProvisionFail();
           return;
         }
+        console.log('[配网] notify 开启成功，先注册回调再发送凭证');
 
-        // 发送 Wi-Fi 凭证
-        this._bleSendWifiCredentials(deviceId, serviceId, writeChar, (err3) => {
-          if (err3) {
-            console.error('发送 Wi-Fi 凭证失败', err3);
+        // 先注册回调，避免设备快速回复时漏收 notify
+        this._bleWaitProvisionResult((err4, result) => {
+          if (err4 || !result || !result.success) {
+            console.error('[配网] 设备配网失败', err4, result);
             this._onProvisionFail();
             return;
           }
 
+          this._markStepDone(2);
+          this._markStepDone(3);
+          this._onProvisionDone();
+        });
+
+        // 再发送 Wi-Fi 凭证
+        this._bleSendWifiCredentials(deviceId, serviceId, writeChar, (err3) => {
+          if (err3) {
+            console.error('[配网] 发送 Wi-Fi 凭证失败', err3);
+            this._onProvisionFail();
+            return;
+          }
+
+          console.log('[配网] Wi-Fi 凭证发送成功，等待设备返回结果');
           this._markStepDone(1);
-
-          // 等待设备联网结果
-          this._bleWaitProvisionResult((err4, result) => {
-            if (err4 || !result || !result.success) {
-              console.error('设备配网失败', err4, result);
-              this._onProvisionFail();
-              return;
-            }
-
-            this._markStepDone(2);
-            this._markStepDone(3);
-            this._onProvisionDone();
-          });
         });
       });
     });
@@ -852,12 +820,14 @@ Page({
       password: this.data.password,
       security: 'WPA2'
     });
+    console.log('[配网] 发送凭证 payload:', payload);
     const buffer = this._stringToArrayBuffer(payload);
     const totalLen = buffer.byteLength;
     let offset = 0;
 
     const sendNext = () => {
       if (offset >= totalLen) {
+        console.log('[配网] 所有数据包发送完毕');
         callback(null);
         return;
       }
@@ -871,19 +841,23 @@ Page({
           offset += BLE_MTU;
           setTimeout(sendNext, 50);
         },
-        fail: (err) => callback(err)
+        fail: (err) => {
+          console.error('[配网] writeBLECharacteristicValue 失败', err);
+          callback(err);
+        }
       });
     };
     sendNext();
   },
 
   _bleWaitProvisionResult(callback) {
+    console.log('[配网] 开始等待设备返回配网结果...');
     this._provisionCallback = callback;
   },
 
   _onBleProvisionNotify(res) {
     const value = this._arrayBufferToString(res.value);
-    console.log('BLE 配网 notify:', value);
+    console.log('[配网] BLE notify 收到数据:', value);
     let result;
     try {
       result = JSON.parse(value);

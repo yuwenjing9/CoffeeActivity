@@ -1,9 +1,11 @@
 const app = getApp();
 const storage = require('../../utils/storage.js');
+const bleManager = require('../../utils/ble-manager.js');
 
 Page({
   data: {
-    devices: []
+    devices: [],
+    checking: false
   },
 
   onShow() {
@@ -16,7 +18,9 @@ Page({
       wx.reLaunch({ url: '/pages/login/login' });
       return;
     }
+    // 先从本地缓存加载，再后台刷新 BLE 状态
     this.loadDevices();
+    this.refreshBLEStatus();
   },
 
   loadDevices() {
@@ -24,9 +28,37 @@ Page({
     this.setData({ devices: list });
   },
 
+  refreshBLEStatus() {
+    if (this.data.checking) return;
+    const devices = storage.getDevices() || [];
+    if (devices.length === 0) return;
+
+    // 只对有 bleDeviceId 的设备做 BLE 检查
+    const bleDevices = devices.filter(d => d.bleDeviceId);
+    if (bleDevices.length === 0) return;
+
+    this.setData({ checking: true });
+    bleManager.checkAllDevices().then((updatedList) => {
+      this.setData({ devices: updatedList, checking: false });
+    }).catch(() => {
+      this.setData({ checking: false });
+    });
+  },
+
   onPullDownRefresh() {
     this.loadDevices();
-    setTimeout(() => wx.stopPullDownRefresh(), 600);
+    const devices = storage.getDevices() || [];
+    const hasBleDevices = devices.some(d => d.bleDeviceId);
+    if (hasBleDevices) {
+      bleManager.checkAllDevices().then((updatedList) => {
+        this.setData({ devices: updatedList });
+        wx.stopPullDownRefresh();
+      }).catch(() => {
+        wx.stopPullDownRefresh();
+      });
+    } else {
+      setTimeout(() => wx.stopPullDownRefresh(), 600);
+    }
   },
 
   onAdd() {

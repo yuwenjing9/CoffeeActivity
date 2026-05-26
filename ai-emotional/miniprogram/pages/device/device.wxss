@@ -33,6 +33,13 @@
   line-height: 1;
 }
 
+.dev-refresh-tip {
+  font-size: 24rpx;
+  color: #9C948D;
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+
 .dev-list-item {
   margin-bottom: 20rpx;
 }
