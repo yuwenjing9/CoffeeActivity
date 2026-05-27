@@ -262,6 +262,12 @@
   margin-bottom: 16rpx;
 }
 
+/* flex 辅助 */
+.flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
 /* 扫描结果 item */
 .scan-item {
   display: flex;
@@ -288,12 +294,18 @@
   font-size: 30rpx;
   color: #1F1B16;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .scan-sub {
   font-size: 22rpx;
   color: #9C948D;
   margin-top: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .scan-rssi {

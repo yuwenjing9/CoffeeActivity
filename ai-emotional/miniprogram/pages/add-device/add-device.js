@@ -10,9 +10,14 @@ const PROVISION_STEPS = [
 ];
 
 // ========== 配网模式开关 ==========
-// true = 模拟模式（无真实设备时调试用，定时器模拟配网过程）
-// false = 正式模式（走真实 BLE 配网，动态发现服务和特征值）
-const PROVISION_MOCK = false;
+// 'full_mock'   - 全模拟：跳过 BLE，定时器模拟配网（无设备时用）
+// 'semi_mock'   - 半模拟：BLE 连接 + 发送凭证走真实流程，设备回复走模拟
+// 'real'        - 全真实：BLE 配网全走真实流程，等待设备 notify 回复
+const PROVISION_MODE = 'real';
+
+// 半模拟模式下，模拟设备回复结果
+// true = 模拟配网成功，false = 模拟配网失败
+const SEMI_MOCK_SUCCESS = true;
 
 // BLE 单包最大字节数（默认 MTU 20，协商后最大 512）
 const BLE_MTU = 20;
@@ -250,35 +255,27 @@ Page({
   _startBleScan() {
     this._offBluetoothDeviceFound();
 
+    // 用防抖合并，避免高频回调频繁 setData
+    this._pendingDevices = [];
+    this._scanFlushTimer = null;
+
     wx.onBluetoothDeviceFound((res) => {
       res.devices.forEach((d) => {
         if (!d.name || d.name === '未知设备') return;
-        const device = this._parseDevice(d);
-        const list = this.data.scanned.slice();
-        const exists = list.findIndex(item => item.deviceId === device.deviceId);
-        if (exists >= 0) {
-          list[exists] = device;
-        } else {
-          list.push(device);
-        }
-        list.sort((a, b) => b.rssi - a.rssi);
-        this.setData({ scanned: list });
+        this._pendingDevices.push(d);
       });
+      this._flushScanResults();
     });
 
-    // 先获取已缓存的设备
+    // 先获取已缓存的设备（用同一个去重逻辑）
     wx.getBluetoothDevices({
       success: (res) => {
         if (res.devices && res.devices.length > 0) {
-          const list = [];
           res.devices.forEach((d) => {
             if (!d.name || d.name === '未知设备') return;
-            list.push(this._parseDevice(d));
+            this._pendingDevices.push(d);
           });
-          list.sort((a, b) => b.rssi - a.rssi);
-          if (list.length > 0) {
-            this.setData({ scanned: list });
-          }
+          this._flushScanResults();
         }
       }
     });
@@ -289,21 +286,6 @@ Page({
       success: () => {
         this._scanTimer = setTimeout(() => {
           this._stopBleScan();
-          // 最后再取一次
-          wx.getBluetoothDevices({
-            success: (res) => {
-              if (res.devices && res.devices.length > 0 && this.data.scanned.length === 0) {
-                const list = [];
-                res.devices.forEach((d) => {
-                  if (!d.name || d.name === '未知设备') return;
-                  list.push(this._parseDevice(d));
-                });
-                list.sort((a, b) => b.rssi - a.rssi);
-                this.setData({ scanned: list });
-              }
-            }
-          });
-          this.setData({ scanning: false });
         }, 12000);
       },
       fail: (err) => {
@@ -314,8 +296,54 @@ Page({
     });
   },
 
+  // 防抖合并扫描结果，300ms 内只刷新一次列表
+  _flushScanResults() {
+    if (this._scanFlushTimer) return;
+    this._scanFlushTimer = setTimeout(() => {
+      this._scanFlushTimer = null;
+      const pending = this._pendingDevices || [];
+      this._pendingDevices = [];
+      if (pending.length === 0) return;
+
+      const list = this.data.scanned.slice();
+      pending.forEach((d) => {
+        const device = this._parseDevice(d);
+        const exists = list.findIndex(item => item.deviceId === device.deviceId);
+        if (exists >= 0) {
+          list[exists] = device;
+        } else {
+          list.push(device);
+        }
+      });
+      list.sort((a, b) => b.rssi - a.rssi);
+      this.setData({ scanned: list });
+    }, 300);
+  },
+
   _stopBleScan() {
     wx.stopBluetoothDevicesDiscovery({ success: () => {}, fail: () => {} });
+    // 立即刷新剩余的待处理结果
+    if (this._scanFlushTimer) {
+      clearTimeout(this._scanFlushTimer);
+      this._scanFlushTimer = null;
+    }
+    const pending = this._pendingDevices || [];
+    this._pendingDevices = [];
+    if (pending.length > 0) {
+      const list = this.data.scanned.slice();
+      pending.forEach((d) => {
+        const device = this._parseDevice(d);
+        const exists = list.findIndex(item => item.deviceId === device.deviceId);
+        if (exists >= 0) {
+          list[exists] = device;
+        } else {
+          list.push(device);
+        }
+      });
+      list.sort((a, b) => b.rssi - a.rssi);
+      this.setData({ scanned: list });
+    }
+    this.setData({ scanning: false });
   },
 
   _offBluetoothDeviceFound() {
@@ -629,9 +657,10 @@ Page({
 
   // ========== 步骤 5：配网执行 ==========
   _runProvision() {
-    if (PROVISION_MOCK) {
+    if (PROVISION_MODE === 'full_mock') {
       this._runProvisionMock();
     } else {
+      // semi_mock 和 real 都走真实 BLE 流程，区别在于等待回复的方式
       this._runProvisionReal();
     }
   },
@@ -666,11 +695,49 @@ Page({
       return;
     }
 
-    // 步骤0: BLE 安全通道已建立（在 onPickDevice 已完成连接）
-    this._markStepDone(0);
+    // 先重新建立 BLE 连接（步骤3到步骤5之间连接可能已断开）
+    this._reconnectBle(deviceId, () => {
+      // 步骤0: BLE 安全通道已建立
+      this._markStepDone(0);
 
-    // 步骤1~3: 发现服务 → 下发凭证 → 等待设备结果
-    this._bleStartProvision(deviceId);
+      // 步骤1~3: 发现服务 → 下发凭证 → 等待设备结果
+      this._bleStartProvision(deviceId);
+    });
+  },
+
+  // 重新连接 BLE 设备（确保配网前连接可用）
+  _reconnectBle(deviceId, callback) {
+    wx.createBLEConnection({
+      deviceId,
+      timeout: 10000,
+      success: () => {
+        console.log('[配网] BLE 连接成功');
+        callback && callback();
+      },
+      fail: (err) => {
+        console.warn('[配网] BLE 连接失败，尝试重新连接', err);
+        // 先断开再重连
+        wx.closeBLEConnection({
+          deviceId,
+          complete: () => {
+            setTimeout(() => {
+              wx.createBLEConnection({
+                deviceId,
+                timeout: 10000,
+                success: () => {
+                  console.log('[配网] BLE 重连成功');
+                  callback && callback();
+                },
+                fail: (err2) => {
+                  console.error('[配网] BLE 重连失败', err2);
+                  this._onProvisionFail();
+                }
+              });
+            }, 500);
+          }
+        });
+      }
+    });
   },
 
   _markStepDone(index) {
@@ -704,12 +771,15 @@ Page({
       this._bleEnableNotify(deviceId, serviceId, notifyChar, (err2) => {
         if (err2) {
           console.error('[配网] 开启 BLE notify 失败', err2);
-          this._onProvisionFail();
-          return;
+          // semi_mock 模式下即使 notify 开启失败也继续（模拟器可能不支持）
+          if (PROVISION_MODE !== 'semi_mock') {
+            this._onProvisionFail();
+            return;
+          }
         }
         console.log('[配网] notify 开启成功，先注册回调再发送凭证');
 
-        // 先注册回调，避免设备快速回复时漏收 notify
+        // 注册回调
         this._bleWaitProvisionResult((err4, result) => {
           if (err4 || !result || !result.success) {
             console.error('[配网] 设备配网失败', err4, result);
@@ -721,6 +791,32 @@ Page({
           this._markStepDone(3);
           this._onProvisionDone();
         });
+
+        // semi_mock 模式：发送凭证后模拟设备回复
+        if (PROVISION_MODE === 'semi_mock') {
+          this._bleSendWifiCredentials(deviceId, serviceId, writeChar, (err3) => {
+            if (err3) {
+              console.error('[配网] 发送 Wi-Fi 凭证失败', err3);
+              this._onProvisionFail();
+              return;
+            }
+            console.log('[配网] Wi-Fi 凭证发送成功（半模拟模式），模拟设备回复...');
+            this._markStepDone(1);
+            // 模拟设备延迟回复
+            setTimeout(() => {
+              if (this._provisionCallback) {
+                const cb = this._provisionCallback;
+                this._provisionCallback = null;
+                if (SEMI_MOCK_SUCCESS) {
+                  cb(null, { success: true });
+                } else {
+                  cb(null, { success: false, reason: 'WiFi 密码错误' });
+                }
+              }
+            }, 2000);
+          });
+          return;
+        }
 
         // 再发送 Wi-Fi 凭证
         this._bleSendWifiCredentials(deviceId, serviceId, writeChar, (err3) => {
@@ -800,9 +896,12 @@ Page({
   },
 
   _bleEnableNotify(deviceId, serviceId, characteristicId, callback) {
-    wx.onBLECharacteristicValueChange((res) => {
-      this._onBleProvisionNotify(res);
-    });
+    // semi_mock 模式下不注册真实 notify 监听，由模拟逻辑控制结果
+    if (PROVISION_MODE !== 'semi_mock') {
+      wx.onBLECharacteristicValueChange((res) => {
+        this._onBleProvisionNotify(res);
+      });
+    }
     wx.notifyBLECharacteristicValueChange({
       deviceId,
       serviceId,
@@ -856,6 +955,15 @@ Page({
   },
 
   _onBleProvisionNotify(res) {
+    // 只处理配网相关的特征值（writeChar 和 notifyChar）
+    const notifyId = (this._wifiNotifyChar || '').replace(/-/g, '').toUpperCase();
+    const writeId = (this._wifiWriteChar || '').replace(/-/g, '').toUpperCase();
+    const resId = (res.characteristicId || '').replace(/-/g, '').toUpperCase();
+    if (notifyId && resId !== notifyId && resId !== writeId) {
+      console.log('[配网] 忽略非配网特征值通知:', resId);
+      return;
+    }
+
     const value = this._arrayBufferToString(res.value);
     console.log('[配网] BLE notify 收到数据:', value);
     let result;
